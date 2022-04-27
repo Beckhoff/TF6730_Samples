@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="ST_SampleData_Nested" Id="{04e748fc-582d-4f5b-bb7e-b6d46032176d}">
+    <Declaration><![CDATA[TYPE ST_SampleData_Nested :
+STRUCT
+	{attribute 'iot.DisplayName' := 'Sample STRING on Second Level Struct'}
+	{attribute 'iot.ReadOnly' := 'true'}
+	sSampleString : STRING := 'Sample String';
+	
+	{attribute 'iot.DisplayName' := 'Sample BOOL on Second Level Struct'}
+	bSampleBool : BOOL := TRUE;
+	
+	{attribute 'iot.DisplayName' := 'Sample LREAL on Second Level Struct'}
+	{attribute 'iot.Unit' := '°C'}
+	{attribute 'iot.ReadOnly' := 'true'}
+	{attribute 'iot.DecimalPrecision' := '1'}
+	iSampleInt : LREAL := 22.321;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
