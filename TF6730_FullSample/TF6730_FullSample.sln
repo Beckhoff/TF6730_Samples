@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
+# TcXaeShell Solution File, Format Version 11.00
 VisualStudioVersion = 15.0.28307.1738
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{B1E792BE-AA5F-4E3C-8C82-674BF9C0715B}") = "TF6730_FullSample", "TF6730_FullSample\TF6730_FullSample.tsproj", "{4B0EEBF3-8DBE-4DDE-939C-B255DF9092D1}"

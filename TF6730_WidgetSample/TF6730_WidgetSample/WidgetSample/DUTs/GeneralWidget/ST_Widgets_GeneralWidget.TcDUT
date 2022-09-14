@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Widgets_GeneralWidget" Id="{d1773bc1-5c0f-4536-88a7-11cfc4f6c8b5}">
+    <Declaration><![CDATA[TYPE ST_Widgets_GeneralWidget :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'true'}
+	{attribute 'iot.DisplayName' := 'General Widget Sample 1'}
+	{attribute 'iot.WidgetType' := 'General'}
+	{attribute 'iot.GeneralWidgetIcon' := 'Snowflake_Blue'}
+	{attribute 'iot.GeneralWidgetColor' := '#FFDCDCDC'}
+	{attribute 'iot.GeneralValue1SwitchVisible' := 'true'}
+	{attribute 'iot.GeneralValue2Visible' := 'false'}
+	{attribute 'iot.GeneralValue2SliderVisible' := 'false'}
+	{attribute 'iot.GeneralValue2SliderValuesVisible' := 'false'}
+	{attribute 'iot.GeneralValue2SliderButtonsVisible' := 'false'}
+	{attribute 'iot.GeneralValue2SliderButtonsInverted' := 'false'}
+	{attribute 'iot.GeneralValue3Visible' := 'false'} 
+	{attribute 'iot.GeneralValue3SliderVisible' := 'false'}
+	{attribute 'iot.GeneralValue3SliderValuesVisible' := 'false'}
+	{attribute 'iot.GeneralValue3SliderButtonsVisible' := 'false'}
+	{attribute 'iot.GeneralValue3SliderButtonsInverted' := 'false'}
+	{attribute 'iot.GeneralMode1Visible' := 'true'} 
+	{attribute 'iot.GeneralMode1Changeable' := 'false'}
+	{attribute 'iot.GeneralMode2Visible' := 'false'} 
+	{attribute 'iot.GeneralMode2Changeable' := 'false'}
+	{attribute 'iot.GeneralMode3Visible' := 'false'} 
+	{attribute 'iot.GeneralMode3Changeable' := 'false'}
+	stGeneral1	: ST_Widget_GeneralWidget_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'General Widget Sample 2'}
+	{attribute 'iot.WidgetType' := 'General'}
+	{attribute 'iot.GeneralWidgetIcon' := 'Co2'}
+	{attribute 'iot.GeneralWidgetColor' := '#66FF0000'}
+	{attribute 'iot.GeneralValue1SwitchVisible' := 'true'}
+	{attribute 'iot.GeneralValue2Visible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderValuesVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderButtonsVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderButtonsInverted' := 'true'}
+	{attribute 'iot.GeneralValue3Visible' := 'false'} 
+	{attribute 'iot.GeneralValue3SliderVisible' := 'false'}
+	{attribute 'iot.GeneralValue3SliderValuesVisible' := 'false'}
+	{attribute 'iot.GeneralValue3SliderButtonsVisible' := 'false'}
+	{attribute 'iot.GeneralValue3SliderButtonsInverted' := 'false'}
+	{attribute 'iot.GeneralMode1Visible' := 'true'} 
+	{attribute 'iot.GeneralMode1Changeable' := 'true'}
+	{attribute 'iot.GeneralMode2Visible' := 'true'} 
+	{attribute 'iot.GeneralMode2Changeable' := 'false'}
+	{attribute 'iot.GeneralMode3Visible' := 'false'} 
+	{attribute 'iot.GeneralMode3Changeable' := 'false'}
+	stGeneral2	: ST_Widget_GeneralWidget_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'General Widget Sample 3'}
+	{attribute 'iot.WidgetType' := 'General'}
+	{attribute 'iot.GeneralWidgetIcon' := 'Room'}
+	{attribute 'iot.GeneralWidgetColor' := '#FF2F4F4F'}
+	{attribute 'iot.GeneralValue1SwitchVisible' := 'true'}
+	{attribute 'iot.GeneralValue2Visible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderValuesVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderButtonsVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderButtonsInverted' := 'true'}
+	{attribute 'iot.GeneralValue3Visible' := 'true'} 
+	{attribute 'iot.GeneralValue3SliderVisible' := 'true'}
+	{attribute 'iot.GeneralValue3SliderValuesVisible' := 'true'}
+	{attribute 'iot.GeneralValue3SliderButtonsVisible' := 'true'}
+	{attribute 'iot.GeneralValue3SliderButtonsInverted' := 'false'}
+	{attribute 'iot.GeneralMode1Visible' := 'true'} 
+	{attribute 'iot.GeneralMode1Changeable' := 'true'}
+	{attribute 'iot.GeneralMode2Visible' := 'true'} 
+	{attribute 'iot.GeneralMode2Changeable' := 'true'}
+	{attribute 'iot.GeneralMode3Visible' := 'true'} 
+	{attribute 'iot.GeneralMode3Changeable' := 'true'}
+	stGeneral3	: ST_Widget_GeneralWidget_AlternativeTemplate;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

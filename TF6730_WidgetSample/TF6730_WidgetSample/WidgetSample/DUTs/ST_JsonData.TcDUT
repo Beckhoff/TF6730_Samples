@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_JsonData" Id="{1893ca2c-e176-49bf-82f6-c51bb867671f}">
+    <Declaration><![CDATA[TYPE ST_JsonData :
+STRUCT
+	sJsonStringToSend : STRING(1000);
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

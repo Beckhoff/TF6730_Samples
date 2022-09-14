@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Widget_Plug_Template" Id="{8a9a2dc5-384f-4f1a-9376-b2f014433b52}">
+    <Declaration><![CDATA[TYPE ST_Widget_Plug_Template :
+STRUCT
+	sDisplayName	: STRING := ''; // Insert STRING here to overwrite iot.DisplayName
+
+	bOn				: BOOL;
+
+	sMode			: STRING; // can be set to any value, does not have to match the array below
+	aModes			: ARRAY[0..1] OF STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
