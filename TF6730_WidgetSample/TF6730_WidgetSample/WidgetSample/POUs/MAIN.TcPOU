@@ -4,7 +4,7 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	// Communicator function block with usage of SendData method
-	fbIotWidgets 	: FB_IotCommunicator := 	(sHostName := '3.74.211.212',
+	fbIotWidgets 	: FB_IotCommunicator := 	(sHostName := '127.0.0.1',
 												nPort := 1883,
 												sMainTopic := 'SampleWidgets',
 												sDevicename := 'Widgets Overview',
