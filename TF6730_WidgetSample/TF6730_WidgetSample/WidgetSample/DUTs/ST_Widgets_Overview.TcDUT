@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <DUT Name="ST_Widgets_Overview" Id="{406d6628-b2e6-4a55-91d0-6e36b6a79b34}">
     <Declaration><![CDATA[TYPE ST_Widgets_Overview :
 STRUCT
@@ -11,6 +11,17 @@ STRUCT
 	{attribute 'iot.LightModeVisible' := 'true'}
 	{attribute 'iot.LightModeChangeable' := 'true'}
 	stLighting	: ST_Widget_Lighting_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured RGBW'}
+	{attribute 'iot.WidgetType' := 'RGBW'}
+	{attribute 'iot.LightValueVisible' := 'true'}
+	{attribute 'iot.LightSliderVisible' := 'true'}
+	{attribute 'iot.LightColorPaletteVisible' := 'true'}
+	{attribute 'iot.LightColorTemperatureSliderVisible' := 'true'}
+	{attribute 'iot.LightModeVisible' := 'true'}
+	{attribute 'iot.LightModeChangeable' := 'true'}
+	stRGBW	: ST_Widget_RGBW_Template;
 	
 	{attribute 'iot.ReadOnly' := 'false'}
 	{attribute 'iot.DisplayName' := 'Full-Featured Blinds'}
@@ -63,6 +74,19 @@ STRUCT
 	{attribute 'iot.TimeSwitchModeVisible' := 'true'}
 	{attribute 'iot.TimeSwitchModeChangeable' := 'true'}
 	stTimeSwitch		: ST_Widget_TimeSwitch_Template;
+	
+	{attribute 'iot.DisplayName' := 'Full-Featured BarChart'}
+	{attribute 'iot.WidgetType' := 'BarChart'}
+	{attribute 'iot.ChartXAxisLabel' := 'Power consumption'}
+	{attribute 'iot.ChartYAxisLabel' := 'Weekdays'}
+	{attribute 'iot.Unit' := 'kW/h'}
+	{attribute 'iot.ChartLegendVisible' := 'true'}
+	{attribute 'iot.ChartValuesVisible' := 'true'}
+	{attribute 'iot.MinValue':='0'}
+	{attribute 'iot.MaxValue':='1550'}
+	{attribute 'iot.ChartBarColor1' := '#00FFFF'}
+	{attribute 'iot.ChartBarColor2' := '#FF00FF'}
+	stBarChart	: St_Widget_BarChart_Template;
 	
 	{attribute 'iot.ReadOnly' := 'false'}
 	{attribute 'iot.DisplayName' := 'Full-Featured General Widget'}

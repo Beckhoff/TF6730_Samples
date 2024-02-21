@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_Widget_BarChart_Template" Id="{3c4ea46c-bba1-479e-a923-771b5dd35118}">
+    <Declaration><![CDATA[TYPE ST_Widget_BarChart_Template :
+STRUCT
+	sDisplayName	: STRING := '';
+
+	aDataSeries			: ARRAY[0..6] OF INT;
+	aComparismDataSeries: ARRAY[0..6] OF INT;
+	aDataSeriesIdentifier:ARRAY[0..6] OF STRING;
+	
+	aLegendLabels		: ARRAY[0..1] OF STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

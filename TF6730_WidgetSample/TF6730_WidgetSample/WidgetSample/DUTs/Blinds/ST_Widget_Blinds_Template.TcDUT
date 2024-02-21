@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <DUT Name="ST_Widget_Blinds_Template" Id="{6b6600d0-c40e-4f58-9c9f-96ec2fd133de}">
     <Declaration><![CDATA[TYPE ST_Widget_Blinds_Template :
 STRUCT
 	sDisplayName		: STRING := ''; // Insert STRING here to overwrite iot.DisplayName
-
+	bActive				: BOOL;
 	bPositionUp			: BOOL;
 	bPositionDown		: BOOL;
 	bAngleUp			: BOOL;

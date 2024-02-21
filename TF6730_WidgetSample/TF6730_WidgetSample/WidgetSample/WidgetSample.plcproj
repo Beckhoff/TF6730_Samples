@@ -26,6 +26,12 @@
     <Compile Include="DUTs\AC\ST_Widget_AC_Template.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\BarChart\ST_Widgets_BarChart.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\BarChart\ST_Widget_BarChart_Template.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Blinds\ST_Widgets_Blinds.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -51,6 +57,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Plugs\ST_Widget_Plug_Template.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\RGBW\ST_Widgets_RGBW.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\RGBW\ST_Widget_RGBW_Template.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_JsonData.TcDUT">
@@ -97,6 +109,8 @@
     <Folder Include="DUTs\Blinds" />
     <Folder Include="DUTs\GeneralWidget" />
     <Folder Include="DUTs\Lighting" />
+    <Folder Include="DUTs\BarChart" />
+    <Folder Include="DUTs\RGBW" />
     <Folder Include="DUTs\Plugs" />
     <Folder Include="DUTs\TimeSwitch" />
     <Folder Include="DUTs\Ventilation" />

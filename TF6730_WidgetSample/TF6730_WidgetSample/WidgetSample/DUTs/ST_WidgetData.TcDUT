@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <DUT Name="ST_WidgetData" Id="{499993c7-8b57-486e-9379-8d02e8d3f92e}">
     <Declaration><![CDATA[TYPE ST_WidgetData :
 STRUCT
@@ -10,6 +10,10 @@ STRUCT
 	{attribute 'iot.NestedStructIcon' := 'Lightbulb'}
 	{attribute 'iot.DisplayName' := 'Light Widgets'}
 	stLights		: ST_Widgets_Lightings;
+	
+	{attribute 'iot.NestedStructIcon' := 'Lightbulb'}
+	{attribute 'iot.DisplayName' := 'RGBW Widgets'}
+	stRGBW			: ST_Widgets_RGBW;
 	
 	{attribute 'iot.NestedStructIcon' := 'Blinds'}
 	{attribute 'iot.DisplayName' := 'Blinds Widgets'}
@@ -30,6 +34,10 @@ STRUCT
 	{attribute 'iot.NestedStructIcon' := 'Clock'}
 	{attribute 'iot.DisplayName' := 'Time Switch Widgets'}
 	stTimeSwitch	: ST_Widgets_TimeSwitch;
+	
+	{attribute 'iot.NestedStructIcon' := 'Floor'}
+	{attribute 'iot.DisplayName' := 'BarChart Widgets'}
+	stBarChart		: ST_Widgets_BarChart;
 	
 	{attribute 'iot.NestedStructIcon' := 'Room'}
 	{attribute 'iot.DisplayName' := 'General Widgets'}
