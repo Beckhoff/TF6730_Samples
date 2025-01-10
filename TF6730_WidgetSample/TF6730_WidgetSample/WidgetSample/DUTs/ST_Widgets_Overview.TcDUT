@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <DUT Name="ST_Widgets_Overview" Id="{406d6628-b2e6-4a55-91d0-6e36b6a79b34}">
+    <Declaration><![CDATA[TYPE ST_Widgets_Overview :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured Lighting'}
+	{attribute 'iot.WidgetType' := 'Lighting'}
+	{attribute 'iot.LightValueVisible' := 'true'}
+	{attribute 'iot.LightSliderVisible' := 'true'}
+	{attribute 'iot.LightModeVisible' := 'true'}
+	{attribute 'iot.LightModeChangeable' := 'true'}
+	stLighting	: ST_Widget_Lighting_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured RGBW'}
+	{attribute 'iot.WidgetType' := 'RGBW'}
+	{attribute 'iot.LightValueVisible' := 'true'}
+	{attribute 'iot.LightSliderVisible' := 'true'}
+	{attribute 'iot.LightColorPaletteVisible' := 'true'}
+	{attribute 'iot.LightColorTemperatureSliderVisible' := 'true'}
+	{attribute 'iot.LightModeVisible' := 'true'}
+	{attribute 'iot.LightModeChangeable' := 'true'}
+	stRGBW	: ST_Widget_RGBW_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured Blinds'}
+	{attribute 'iot.WidgetType' := 'Blinds'}
+	{attribute 'iot.BlindsPositionValueVisible' := 'true'}
+	{attribute 'iot.BlindsPositionSliderVisible' := 'true'}
+	{attribute 'iot.BlindsAngleValueVisible' := 'true'} 
+	{attribute 'iot.BlindsAngleSliderVisible' := 'true'}
+	{attribute 'iot.BlindsModeVisible' := 'true'} 
+	{attribute 'iot.BlindsModeChangeable' := 'true'}
+	stBlinds	: ST_Widget_Blinds_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured Simple Blinds'}
+	{attribute 'iot.WidgetType' := 'SimpleBlinds'}
+	{attribute 'iot.BlindsPositionSliderVisible' := 'true'}
+	stSimpleBlinds	: ST_Widget_SimpleBlinds_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured Plug'}
+	{attribute 'iot.WidgetType' := 'Plug'}
+	{attribute 'iot.PlugModeVisible' := 'true'}
+	{attribute 'iot.PlugModeChangeable' := 'true'}
+	stPlug		: ST_Widget_Plug_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured AC'}
+	{attribute 'iot.WidgetType' := 'AC'}
+	{attribute 'iot.ACValueRequestVisible' := 'true'}
+	{attribute 'iot.ACSliderVisible' := 'true'}
+	{attribute 'iot.ACModeVisible' := 'true'}
+	{attribute 'iot.ACModeChangeable' := 'true'}
+	{attribute 'iot.ACModeStrengthVisible' := 'true'}
+	{attribute 'iot.ACModeStrengthChangeable' := 'true'}
+	{attribute 'iot.ACModeLamellaVisible' := 'true'}
+	{attribute 'iot.ACModeLamellaChangeable' := 'true'}
+	stAC			: ST_Widget_AC_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured Ventilation'}
+	{attribute 'iot.WidgetType' := 'Ventilation'}
+	{attribute 'iot.VentilationValueRequestVisible' := 'true'}
+	{attribute 'iot.VentilationSliderVisible' := 'true'}
+	{attribute 'iot.VentilationModeVisible' := 'true'}
+	{attribute 'iot.VentilationModeChangeable' := 'true'}
+	stVentilation		: ST_Widget_Ventilation_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured Time Switch'}
+	{attribute 'iot.WidgetType' := 'TimeSwitch'}
+	{attribute 'iot.TimeSwitchStartTimeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchEndTimeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchStartDateVisible' := 'true'}
+	{attribute 'iot.TimeSwitchEndDateVisible' := 'true'}
+	{attribute 'iot.TimeSwitchDaysVisible' := 'true'}
+	{attribute 'iot.TimeSwitchModeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchModeChangeable' := 'true'}
+	stTimeSwitch		: ST_Widget_TimeSwitch_Template;
+	
+	{attribute 'iot.DisplayName' := 'Full-Featured BarChart'}
+	{attribute 'iot.WidgetType' := 'BarChart'}
+	{attribute 'iot.ChartXAxisLabel' := 'Power consumption'}
+	{attribute 'iot.ChartYAxisLabel' := 'Weekdays'}
+	{attribute 'iot.Unit' := 'kW/h'}
+	{attribute 'iot.ChartLegendVisible' := 'true'}
+	{attribute 'iot.ChartValuesVisible' := 'true'}
+	{attribute 'iot.MinValue':='0'}
+	{attribute 'iot.MaxValue':='1550'}
+	{attribute 'iot.ChartBarColor1' := '#00FFFF'}
+	{attribute 'iot.ChartBarColor2' := '#FF00FF'}
+	stBarChart	: St_Widget_BarChart_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured Charging Station'}
+	{attribute 'iot.WidgetType' := 'ChargingStation'}
+	{attribute 'iot.ChargingStationReserveVisible' := 'true'} 
+	{attribute 'iot.ChargingStationPhase2Visible' := 'true'} 
+	{attribute 'iot.ChargingStationPhase3Visible' := 'true'} 
+	stChargingStation	: ST_Widget_ChargingStation_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured Energy Monitoring'}
+	{attribute 'iot.WidgetType' := 'EnergyMonitoring'}
+	{attribute 'iot.EnergyMonitoringPhase2Visible' := 'true'} 
+	{attribute 'iot.EnergyMonitoringPhase3Visible' := 'true'} 
+	stEnergyMonitoring	: ST_Widget_EnergyMonitoring_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Full-Featured General Widget'}
+	{attribute 'iot.WidgetType' := 'General'}
+	{attribute 'iot.GeneralWidgetIcon' := 'Room'}
+	{attribute 'iot.GeneralWidgetColor' := '#FFFF00FF'}
+	{attribute 'iot.GeneralValue1SwitchVisible' := 'true'}
+	{attribute 'iot.GeneralValue2Visible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderValuesVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderButtonsVisible' := 'true'}
+	{attribute 'iot.GeneralValue2SliderButtonsInverted' := 'true'}
+	{attribute 'iot.GeneralValue3Visible' := 'true'} 
+	{attribute 'iot.GeneralValue3SliderVisible' := 'true'}
+	{attribute 'iot.GeneralValue3SliderValuesVisible' := 'true'}
+	{attribute 'iot.GeneralValue3SliderButtonsVisible' := 'true'}
+	{attribute 'iot.GeneralValue3SliderButtonsInverted' := 'false'}
+	{attribute 'iot.GeneralMode1Visible' := 'true'} 
+	{attribute 'iot.GeneralMode1Changeable' := 'true'}
+	{attribute 'iot.GeneralMode2Visible' := 'true'} 
+	{attribute 'iot.GeneralMode2Changeable' := 'true'}
+	{attribute 'iot.GeneralMode3Visible' := 'true'} 
+	{attribute 'iot.GeneralMode3Changeable' := 'true'}
+	stGeneral	: ST_Widget_GeneralWidget_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

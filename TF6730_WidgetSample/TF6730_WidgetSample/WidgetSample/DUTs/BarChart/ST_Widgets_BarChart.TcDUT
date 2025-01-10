@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_Widgets_BarChart" Id="{fb8d13fe-ebb7-40ec-80c1-973c74d5c45c}">
+    <Declaration><![CDATA[TYPE ST_Widgets_BarChart :
+STRUCT
+	{attribute 'iot.DisplayName' := 'Chart Widget'}
+	{attribute 'iot.WidgetType' := 'BarChart'}
+	{attribute 'iot.ChartXAxisLabel' := 'Power consumption'}
+	{attribute 'iot.ChartYAxisLabel' := 'Weekdays'}
+	{attribute 'iot.Unit' := 'kW/h'}
+	{attribute 'iot.ChartLegendVisible' := 'true'}
+	{attribute 'iot.ChartValuesVisible' := 'true'}
+	{attribute 'iot.MinValue':='0'}
+	{attribute 'iot.MaxValue':='1550'}
+	{attribute 'iot.ChartBarColor1' := '#FF80AC'}
+	{attribute 'iot.ChartBarColor2' := '#FF00FF'}
+	stBarChart1	: St_Widget_BarChart_Template;
+	
+	{attribute 'iot.DisplayName' := 'Chart Widget'}
+	{attribute 'iot.WidgetType' := 'BarChart'}
+	{attribute 'iot.ChartXAxisLabel' := 'Power consumption'}
+	{attribute 'iot.ChartYAxisLabel' := 'Weekdays'}
+	{attribute 'iot.Unit' := 'kW/h'}
+	{attribute 'iot.ChartLegendVisible' := 'true'}
+	{attribute 'iot.ChartValuesVisible' := 'true'}
+	{attribute 'iot.MinValue':='0'}
+	{attribute 'iot.MaxValue':='1600'}
+	{attribute 'iot.ChartBarColor1' := '#00FFFF'}
+	{attribute 'iot.ChartBarColor2' := '#0091AA'}
+	stBarChart2	: St_Widget_BarChart_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

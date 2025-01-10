@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Widget_Ventilation_AlternativeTemplate" Id="{39e81216-7fd9-45df-bccf-94a6ba964531}">
+    <Declaration><![CDATA[TYPE ST_Widget_Ventilation_AlternativeTemplate :
+STRUCT
+	sDisplayName	: STRING := ''; // Insert STRING here to overwrite iot.DisplayName
+
+	bOn				: BOOL;
+	
+	{attribute 'iot.Unit':='ppm'}
+	{attribute 'iot.MinValue':='600'}
+	{attribute 'iot.MaxValue':='1200'}
+	nValue			: INT;	
+	nValueRequest 	: INT;
+	
+	sMode			: STRING; // can be set to any value, does not have to match the array below
+	aModes			: ARRAY[0..1] OF STRING;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

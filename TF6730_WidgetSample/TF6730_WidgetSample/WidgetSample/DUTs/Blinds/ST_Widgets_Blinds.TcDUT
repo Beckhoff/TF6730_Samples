@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <DUT Name="ST_Widgets_Blinds" Id="{1de0b931-7b19-4c84-8309-5a6747c6ae1d}">
+    <Declaration><![CDATA[TYPE ST_Widgets_Blinds :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'true'}
+	{attribute 'iot.DisplayName' := 'Blinds Sample 1'}
+	{attribute 'iot.WidgetType' := 'Blinds'}
+	{attribute 'iot.BlindsPositionValueVisible' := 'true'}
+	{attribute 'iot.BlindsPositionSliderVisible' := 'true'}
+	{attribute 'iot.BlindsAngleValueVisible' := 'false'} 
+	{attribute 'iot.BlindsAngleSliderVisible' := 'false'}
+	{attribute 'iot.BlindsModeVisible' := 'true'} 
+	{attribute 'iot.BlindsModeChangeable' := 'false'}
+	stBlinds1	: ST_Widget_Blinds_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Blinds Sample 2'}
+	{attribute 'iot.WidgetType' := 'Blinds'}
+	{attribute 'iot.BlindsPositionValueVisible' := 'true'}
+	{attribute 'iot.BlindsPositionSliderVisible' := 'true'}
+	{attribute 'iot.BlindsAngleValueVisible' := 'false'} 
+	{attribute 'iot.BlindsAngleSliderVisible' := 'false'}
+	{attribute 'iot.BlindsModeVisible' := 'false'} 
+	{attribute 'iot.BlindsModeChangeable' := 'false'}
+	stBlinds2	: ST_Widget_Blinds_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Blinds Sample 3'}
+	{attribute 'iot.WidgetType' := 'Blinds'}
+	{attribute 'iot.BlindsPositionValueVisible' := 'true'}
+	{attribute 'iot.BlindsPositionSliderVisible' := 'true'}
+	{attribute 'iot.BlindsAngleValueVisible' := 'true'} 
+	{attribute 'iot.BlindsAngleSliderVisible' := 'true'}
+	{attribute 'iot.BlindsModeVisible' := 'true'} 
+	{attribute 'iot.BlindsModeChangeable' := 'true'}
+	stBlinds3	: ST_Widget_Blinds_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Simple Blinds Sample 1'}
+	{attribute 'iot.WidgetType' := 'SimpleBlinds'}
+	{attribute 'iot.BlindsPositionSliderVisible' := 'true'}
+	stSimpleBlinds1	: ST_Widget_SimpleBlinds_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Simple Blinds Sample 2'}
+	{attribute 'iot.WidgetType' := 'SimpleBlinds'}
+	{attribute 'iot.BlindsPositionSliderVisible' := 'false'}
+	stSimpleBlinds2	: ST_Widget_SimpleBlinds_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <DUT Name="ST_Widget_ChargingStation_Template" Id="{5334ca19-2058-4b84-9142-085f55f7b1ad}">
+    <Declaration><![CDATA[TYPE ST_Widget_ChargingStation_Template :
+STRUCT
+	sDisplayName				: STRING;
+	
+	bStartCharging				: BOOL;
+	bStopCharging				: BOOL;
+	bReserveCharging			: BOOL;
+	
+	sStatus						: STRING;	
+	nBatteryLevel				: UINT;
+	nCurrentPower				: LREAL;
+	aThreePhaseMaxPower			: ARRAY[0..2] OF LREAL;
+	aThreePhaseCurrentPower		: ARRAY[0..2] OF LREAL;
+	aThreePhaseAmperage			: ARRAY[0..2] OF LREAL;
+	aThreePhaseVoltage			: ARRAY[0..2] OF LREAL;
+	nChargingTime				: UDINT;
+	nChargingEnergy				: LREAL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

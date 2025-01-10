@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <DUT Name="ST_Widget_EnergyMonitoring_Template" Id="{351dcb5a-3605-4bc7-a68f-23114acfa9d5}">
+    <Declaration><![CDATA[TYPE ST_Widget_EnergyMonitoring_Template :
+STRUCT
+	sDisplayName				: STRING;
+	
+	sStatus						: STRING;	
+	aThreePhaseMaxPower			: ARRAY[0..2] OF LREAL;
+	aThreePhaseCurrentPower		: ARRAY[0..2] OF LREAL;
+	aThreePhasePowerUnits		: ARRAY[0..2] OF STRING;
+	aThreePhaseAmperage			: ARRAY[0..2] OF LREAL;
+	aThreePhaseAmperageUnits	: ARRAY[0..2] OF STRING;
+	aThreePhaseVoltage			: ARRAY[0..2] OF LREAL;
+	aThreePhaseVoltageUnits		: ARRAY[0..2] OF STRING;
+	nPowerQualityFactor			: LREAL;	
+	nCurrentPower				: LREAL;
+	sPowerUnit					: STRING;
+	nEnergy						: LREAL;
+	sEnergyUnit					: STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Widget_TimeSwitch_Template" Id="{7556578c-57d3-44a3-a30e-94b55f3129f0}">
+    <Declaration><![CDATA[TYPE ST_Widget_TimeSwitch_Template :
+STRUCT
+	sDisplayName	: STRING := ''; // Insert STRING here to overwrite iot.DisplayName
+	
+	bOn				: BOOL;
+	
+	tStartTime		: TIME_OF_DAY;
+	tEndTime		: TIME_OF_DAY;
+	dStartDate		: DATE;
+	dEndDate		: DATE;
+	bYearly			: BOOL;
+	
+	bMonday			: BOOL;
+	bTuesday		: BOOL;
+	bWednesday		: BOOL;
+	bThursday		: BOOL;
+	bFriday			: BOOL;
+	bSaturday		: BOOL;
+	bSunday			: BOOL;
+	
+	sMode			: STRING; // can be set to any value, does not have to match the array below
+	aModes			: ARRAY[0..1] OF STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

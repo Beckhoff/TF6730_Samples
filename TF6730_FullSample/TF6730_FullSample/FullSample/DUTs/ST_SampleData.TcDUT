@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_SampleData" Id="{1a33613f-f1e2-4f20-9e95-aa46d7822b94}">
+    <Declaration><![CDATA[TYPE ST_SampleData :
+STRUCT
+	{attribute 'iot.DisplayName' := 'Sample STRING on First Level Struct'}
+	sSampleString : STRING := 'Sample String';
+	
+	{attribute 'iot.DisplayName' := 'Sample BOOL on First Level Struct'}
+	{attribute 'iot.ReadOnly' := 'true'}
+	bSampleBool : BOOL := TRUE;
+	
+	{attribute 'iot.DisplayName' := 'Sample INT on First Level Struct'}
+	{attribute 'iot.Unit' := '%'}
+	{attribute 'iot.MinValue' := '0'}
+	{attribute 'iot.MaxValue' := '100'}
+	{attribute 'iot.ReadOnly' := 'true'}
+	iSampleInt : INT := 55;
+	
+	{attribute 'iot.NestedStructIcon' := 'Room'}
+	{attribute 'iot.DisplayName' := 'Second Level Struct'}
+	stNestedData : ST_SampleData_Nested;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <DUT Name="ST_Widget_SimpleBlinds_Template" Id="{8e47abc8-8026-4249-ae75-aa0006660c48}">
+    <Declaration><![CDATA[TYPE ST_Widget_SimpleBlinds_Template :
+STRUCT
+	sDisplayName		: STRING := ''; // Insert STRING here to overwrite iot.DisplayName
+	
+	bPositionUp			: BOOL;
+	bPositionDown		: BOOL;
+	{attribute 'iot.MinValue':='0'}
+	{attribute 'iot.MaxValue':='100'}
+	nPositionValue		: INT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

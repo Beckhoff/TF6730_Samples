@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_Widgets_Plugs" Id="{4a4a14c5-0116-4579-8bc9-5401e0a24d40}">
+    <Declaration><![CDATA[TYPE ST_Widgets_Plugs :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Plug Sample 1'}
+	{attribute 'iot.WidgetType' := 'Plug'}
+	{attribute 'iot.PlugModeVisible' := 'false'}
+	{attribute 'iot.PlugModeChangeable' := 'false'}
+	stPlug1		: ST_Widget_Plug_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Plug Sample 2'}
+	{attribute 'iot.WidgetType' := 'Plug'}
+	{attribute 'iot.PlugModeVisible' := 'true'}
+	{attribute 'iot.PlugModeChangeable' := 'true'}
+	stPlug2		: ST_Widget_Plug_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

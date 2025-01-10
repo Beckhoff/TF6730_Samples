@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <POU Name="MAIN" Id="{c809f85b-ef8c-42e2-a5f4-bb18b84a8841}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	// Communicator function block with usage of SendData method
+	fbIotWidgets 	: FB_IotCommunicator := 	(sHostName := '127.0.0.1',
+												nPort := 1883,
+												sMainTopic := 'SampleWidgets',
+												sDevicename := 'Widgets Overview',
+												sDeviceIcon := 'House');
+	
+	timer   		 : TON;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Cyclic FB calling
+fbIotWidgets.Execute(TRUE);
+
+IF fbIotWidgets.bConnected THEN
+	timer(IN:=TRUE, PT:=T#500MS);
+END_IF
+
+IF timer.Q THEN
+	timer(IN:=FALSE);
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData),SIZEOF(GVL_Widgets.stWidgetData));
+END_IF
+
+ManageWidgetsOverview();
+ManageLighting();
+ManageAC();
+ManageBlinds();
+ManageChargingStation();
+ManageGeneralWidget();
+ManagePlugs();
+ManageRGBW();
+ManageTimeSwitch();
+ManageVentilation();
+
+WidgetValues();
+]]></ST>
+    </Implementation>
+    <Method Name="ManageAC" Id="{4c996a6e-fb2a-4ce1-b230-aab1f117d966}">
+      <Declaration><![CDATA[METHOD ManageAC
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//AC Sample 1 - no slider, no AC mode
+	IF fbIotWidgets.fbCommand.sVarName = 'stAC.stAC1.sMode_Strength' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stAC.stAC1.sMode_Strength), SIZEOF(GVL_Widgets.stWidgetData.stAC.stAC1.sMode_Strength), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stAC.stAC1.sMode_Lamella' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stAC.stAC1.sMode_Lamella), SIZEOF(GVL_Widgets.stWidgetData.stAC.stAC1.sMode_Lamella), E_IotCommunicatorDatatype.type_STRING);
+	//AC Sample 2
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stAC.stAC2.nTemperatureRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stAC.stAC2.nTemperatureRequest), SIZEOF(GVL_Widgets.stWidgetData.stAC.stAC2.nTemperatureRequest), E_IotCommunicatorDatatype.type_LREAL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stAC.stAC2.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stAC.stAC2.sMode), SIZEOF(GVL_Widgets.stWidgetData.stAC.stAC2.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stAC.stAC2.sMode_Strength' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stAC.stAC2.sMode_Strength), SIZEOF(GVL_Widgets.stWidgetData.stAC.stAC2.sMode_Strength), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stAC.stAC2.sMode_Lamella' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stAC.stAC2.sMode_Lamella), SIZEOF(GVL_Widgets.stWidgetData.stAC.stAC2.sMode_Lamella), E_IotCommunicatorDatatype.type_STRING);
+	ELSE
+		RETURN;
+	END_IF
+	//AC Sample 3 - no processing required - readOnly widget
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF
+
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageBlinds" Id="{2315e19e-e10a-45ad-b3ce-af436b3c7a69}">
+      <Declaration><![CDATA[METHOD ManageBlinds
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//Blinds Sample 1 - no processing required - readOnly Widget
+	//Blinds Sample 2 - no mode, no angle slider/value
+	IF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds2.bPositionUp' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionUp), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionUp), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds2.bPositionDown' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionDown), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionDown), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds2.nPositionRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionRequest), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionRequest), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds2.bActive' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bActive), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bActive), E_IotCommunicatorDatatype.type_BOOL);
+	//Blinds Sample 3
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds3.bPositionUp' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionUp), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionUp), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds3.bPositionDown' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionDown), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionDown), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds3.nPositionRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionRequest), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionRequest), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds3.bAngleUp' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleUp), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleUp), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds3.bAngleDown' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleDown), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleDown), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds3.nAngleRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleRequest), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleRequest), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds3.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.sMode), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stBlinds3.bActive' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bActive), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bActive), E_IotCommunicatorDatatype.type_BOOL);
+	//Simple Blinds Sample 1
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stSimpleBlinds1.bPositionUp' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionUp), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionUp), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stSimpleBlinds1.bPositionDown' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionDown), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionDown), E_IotCommunicatorDatatype.type_BOOL);
+	//Simple Blinds Sample 2
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stSimpleBlinds2.bPositionUp' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionUp), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionUp), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stBlinds.stSimpleBlinds2.bPositionDown' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionDown), SIZEOF(GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionDown), E_IotCommunicatorDatatype.type_BOOL);
+	ELSE
+		RETURN;
+	END_IF
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageChargingStation" Id="{9176a7f3-8458-404b-ad7e-746d2563e09b}">
+      <Declaration><![CDATA[METHOD ManageChargingStation
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	// Charging Station Sample 1 - Receive Start, Stop, Reserve requests
+	IF fbIotWidgets.fbCommand.sVarName = 'stChargingStation.stChargingStation1.bStartCharging' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.bStartCharging), SIZEOF(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.bStartCharging), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stChargingStation.stChargingStation1.bStopCharging' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.bStopCharging), SIZEOF(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.bStopCharging), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stChargingStation.stChargingStation1.bReserveCharging' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.bReserveCharging), SIZEOF(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.bReserveCharging), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stChargingStation.stChargingStation2.bStartCharging' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.bStartCharging), SIZEOF(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.bStartCharging), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stChargingStation.stChargingStation2.bStopCharging' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.bStopCharging), SIZEOF(GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.bStopCharging), E_IotCommunicatorDatatype.type_BOOL);
+	ELSE
+		RETURN;
+	END_IF	
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageGeneralWidget" Id="{67a71055-36bd-4f44-b2f9-a58e4732446f}">
+      <Declaration><![CDATA[METHOD ManageGeneralWidget
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//General Widget Sample 1 - no processing required - readOnly Widget
+	//General Widget Sample 2 - two modes, one slider
+	IF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral2.bValue1' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue1), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue1), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral2.bValue2Up' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue2Up), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue2Up), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral2.bValue2Down' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue2Down), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue2Down), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral2.nValue2Request' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2Request), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2Request), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral2.sMode1' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.sMode1), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral2.sMode1), E_IotCommunicatorDatatype.type_STRING);
+	//General Widget Sample 3
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.bValue1' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue1), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue1), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.bValue2Up' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue2Up), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue2Up), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.bValue2Down' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue2Down), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue2Down), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.nValue2Request' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2Request), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2Request), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.bValue3Up' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue3Up), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue3Up), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.bValue3Down' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue3Down), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue3Down), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.nValue3Request' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3Request), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3Request), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.sMode1' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode1), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode1), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.sMode2' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode2), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode2), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stGeneral.stGeneral3.sMode3' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode3), SIZEOF(GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode3), E_IotCommunicatorDatatype.type_STRING);
+	ELSE
+		RETURN;
+	END_IF
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageLighting" Id="{f0476635-873f-4ceb-b190-cc0e4b25be1e}">
+      <Declaration><![CDATA[METHOD ManageLighting
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//Lighting Sample 1 - no processing required - readOnly Widget
+	//Lighting Sample 2 - no value
+	IF fbIotWidgets.fbCommand.sVarName = 'stLights.stLighting2.bLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stLights.stLighting2.bLight), SIZEOF(GVL_Widgets.stWidgetData.stLights.stLighting2.bLight), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stLights.stLighting2.nLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stLights.stLighting2.nLight), SIZEOF(GVL_Widgets.stWidgetData.stLights.stLighting2.nLight), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stLights.stLighting2.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stLights.stLighting2.sMode), SIZEOF(GVL_Widgets.stWidgetData.stLights.stLighting2.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//Lighting Sample 3
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stLights.stLighting3.bLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stLights.stLighting3.bLight), SIZEOF(GVL_Widgets.stWidgetData.stLights.stLighting3.bLight), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stLights.stLighting3.nLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stLights.stLighting3.nLight), SIZEOF(GVL_Widgets.stWidgetData.stLights.stLighting3.nLight), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stLights.stLighting3.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stLights.stLighting3.sMode), SIZEOF(GVL_Widgets.stWidgetData.stLights.stLighting3.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSE
+		RETURN;
+	END_IF
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF
+
+//Lighting Sample 2
+GVL_Widgets.stWidgetData.stLights.stLighting2.aModes[0]:='Automatic';
+GVL_Widgets.stWidgetData.stLights.stLighting2.aModes[1]:='Manual';
+//Lighting Sample 3
+GVL_Widgets.stWidgetData.stLights.stLighting3.aModes[0]:='Night';
+GVL_Widgets.stWidgetData.stLights.stLighting3.aModes[1]:='Day';]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManagePlugs" Id="{169432dc-c82b-4776-bf2b-967379860a7c}">
+      <Declaration><![CDATA[METHOD ManagePlugs
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//Plug Sample 1 - no mode
+	IF fbIotWidgets.fbCommand.sVarName = 'stPlugs.stPlug1.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stPlugs.stPlug1.bOn), SIZEOF(GVL_Widgets.stWidgetData.stPlugs.stPlug1.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	//Plug Sample 2
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stPlugs.stPlug2.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stPlugs.stPlug2.bOn), SIZEOF(GVL_Widgets.stWidgetData.stPlugs.stPlug2.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stPlugs.stPlug2.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stPlugs.stPlug2.sMode), SIZEOF(GVL_Widgets.stWidgetData.stPlugs.stPlug2.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSE
+		RETURN;
+	END_IF
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageRGBW" Id="{d42e686a-8d88-44b0-adec-8f87bc96c576}">
+      <Declaration><![CDATA[METHOD ManageRGBW
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//RGBW Sample 2 - no color temperature
+	IF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB2.bLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB2.bLight), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB2.bLight), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB2.nLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB2.nLight), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB2.nLight), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB2.nHueValue' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB2.nHueValue), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB2.nHueValue), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB2.nSaturation' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB2.nSaturation), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB2.nSaturation), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB2.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB2.sMode), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB2.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//RGBW Sample 3
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.bLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.bLight), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.bLight), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.nLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nLight), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nLight), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.nHueValue' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nHueValue), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nHueValue), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.nSaturation' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nSaturation), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nSaturation), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.nColorTemperature' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nColorTemperature), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nColorTemperature), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.sMode), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSE
+		RETURN;
+	END_IF
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageTimeSwitch" Id="{692a6677-8fbb-42f9-9377-7f70ae7c5da5}">
+      <Declaration><![CDATA[METHOD ManageTimeSwitch
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//TimeSwitch Sample 1 - no days visible, mode readOnly
+	IF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch1.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.bOn), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch1.bYearly' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.bYearly), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.bYearly), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch1.tStartTime' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.tStartTime), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.tStartTime), E_IotCommunicatorDatatype.type_TIME_OF_DAY);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch1.tEndTime' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.tEndTime), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.tEndTime), E_IotCommunicatorDatatype.type_TIME_OF_DAY);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch1.dStartDate' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.dStartDate), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.dStartDate), E_IotCommunicatorDatatype.type_DATE);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch1.dEndDate' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.dEndDate), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.dEndDate), E_IotCommunicatorDatatype.type_DATE);
+	//TimeSwitch Sample 2 - no dates visible, no mode
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bOn), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bYearly' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bYearly), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bYearly), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bMonday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bMonday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bMonday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bTuesday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bTuesday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bTuesday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bWednesday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bWednesday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bWednesday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bThursday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bThursday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bThursday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bFriday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bFriday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bFriday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bSaturday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bSaturday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bSaturday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.bSunday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bSunday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bSunday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.tStartTime' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.tStartTime), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.tStartTime), E_IotCommunicatorDatatype.type_TIME_OF_DAY);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch2.tEndTime' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.tEndTime), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.tEndTime), E_IotCommunicatorDatatype.type_TIME_OF_DAY);
+	//TimeSwitch Sample 3
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bOn), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bYearly' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bYearly), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bYearly), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bMonday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bMonday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bMonday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bTuesday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bTuesday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bTuesday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bWednesday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bWednesday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bWednesday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bThursday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bThursday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bThursday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bFriday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bFriday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bFriday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bSaturday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bSaturday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bSaturday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.bSunday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bSunday), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bSunday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.tStartTime' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.tStartTime), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.tStartTime), E_IotCommunicatorDatatype.type_TIME_OF_DAY);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.tEndTime' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.tEndTime), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.tEndTime), E_IotCommunicatorDatatype.type_TIME_OF_DAY);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.dStartDate' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.dStartDate), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.dStartDate), E_IotCommunicatorDatatype.type_DATE);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.dEndDate' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.dEndDate), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.dEndDate), E_IotCommunicatorDatatype.type_DATE);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stTimeSwitch.stTimeSwitch3.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.sMode), SIZEOF(GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSE
+		RETURN;
+	END_IF
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageVentilation" Id="{2158c104-ec1f-49c6-856e-068482107570}">
+      <Declaration><![CDATA[METHOD ManageVentilation
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//Ventilation Sample 1 - no processing required - readOnly Widget
+	//Ventilation Sample 2 - no mode adjustable, no request value visible
+	IF fbIotWidgets.fbCommand.sVarName = 'stVentilation.stVentilation2.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stVentilation.stVentilation2.bOn), SIZEOF(GVL_Widgets.stWidgetData.stVentilation.stVentilation2.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stVentilation.stVentilation2.nValueRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stVentilation.stVentilation2.nValueRequest), SIZEOF(GVL_Widgets.stWidgetData.stVentilation.stVentilation2.nValueRequest), E_IotCommunicatorDatatype.type_INT);
+	//Ventilation Sample 3
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stVentilation.stVentilation3.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stVentilation.stVentilation3.bOn), SIZEOF(GVL_Widgets.stWidgetData.stVentilation.stVentilation3.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stVentilation.stVentilation3.nValueRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stVentilation.stVentilation3.nValueRequest), SIZEOF(GVL_Widgets.stWidgetData.stVentilation.stVentilation3.nValueRequest), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stVentilation.stVentilation3.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stVentilation.stVentilation3.sMode), SIZEOF(GVL_Widgets.stWidgetData.stVentilation.stVentilation3.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSE
+		RETURN;
+	END_IF
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageWidgetsOverview" Id="{40efafb6-7056-4075-a057-139bb46f5ad0}">
+      <Declaration><![CDATA[METHOD ManageWidgetsOverview
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF fbIotWidgets.fbCommand.bAvailable THEN
+	//Overview Lighting
+	IF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stLighting.bLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.bLight), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.bLight), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stLighting.nLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.nLight), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.nLight), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stLighting.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//Overview RGBW
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.bLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.bLight), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.bLight), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.nLight' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nLight), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nLight), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.nHueValue' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nHueValue), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nHueValue), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.nSaturation' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nSaturation), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nSaturation), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.nColorTemperature' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nColorTemperature), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nColorTemperature), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//Overview Blinds
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.bPositionUp' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionUp), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionUp), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.bPositionDown' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionDown), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionDown), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.nPositionRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionRequest), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionRequest), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.bAngleUp' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleUp), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleUp), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.bAngleDown' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleDown), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleDown), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.nAngleRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleRequest), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleRequest), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.bActive' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bActive), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bActive), E_IotCommunicatorDatatype.type_BOOL);
+	//Overview Simple Blinds
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stSimpleBlinds.bPositionUp' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionUp), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionUp), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stSimpleBlinds.bPositionDown' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionDown), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionDown), E_IotCommunicatorDatatype.type_BOOL);
+	//Overview Plug
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stPlug.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stPlug.bOn), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stPlug.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stPlug.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stPlug.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stPlug.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//Overview AC
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stAC.nTemperatureRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nTemperatureRequest), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nTemperatureRequest), E_IotCommunicatorDatatype.type_LREAL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stAC.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stAC.sMode_Strength' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode_Strength), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode_Strength), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stAC.sMode_Lamella' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode_Lamella), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode_Lamella), E_IotCommunicatorDatatype.type_STRING);
+	//Overview Ventilation
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stVentilation.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.bOn), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stVentilation.nValueRequest' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.nValueRequest), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.nValueRequest), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stVentilation.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//Overview Timer Switch
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bOn), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.tStartTime' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.tStartTime), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.tStartTime), E_IotCommunicatorDatatype.type_TIME_OF_DAY);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.tEndTime' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.tEndTime), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.tEndTime), E_IotCommunicatorDatatype.type_TIME_OF_DAY);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.dStartDate' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.dStartDate), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.dStartDate), E_IotCommunicatorDatatype.type_DATE);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.dEndDate' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.dEndDate), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.dEndDate), E_IotCommunicatorDatatype.type_DATE);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bYearly' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bYearly), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bYearly), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bMonday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bMonday), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bMonday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bTuesday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bTuesday), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bTuesday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bWednesday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bWednesday), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bWednesday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bThursday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bThursday), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bThursday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bFriday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bFriday), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bFriday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bSaturday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bSaturday), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bSaturday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.bSunday' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bSunday), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bSunday), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stTimeSwitch.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//Overview General Widget
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.bValue1' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue1), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue1), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.bValue2Up' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue2Up), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue2Up), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.bValue2Down' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue2Down), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue2Down), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.nValue2Request' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2Request), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2Request), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.bValue3Up' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue3Up), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue3Up), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.bValue3Down' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue3Down), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue3Down), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.nValue3Request' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3Request), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3Request), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.sMode1' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode1), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode1), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.sMode2' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode2), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode2), E_IotCommunicatorDatatype.type_STRING);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stGeneral.sMode3' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode3), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode3), E_IotCommunicatorDatatype.type_STRING);
+	// Charging Station - Receive Start, Stop, Reserve requests
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stChargingStation.bStartCharging' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.bStartCharging), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.bStartCharging), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stChargingStation.bStopCharging' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.bStopCharging), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.bStopCharging), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stChargingStation.bReserveCharging' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.bReserveCharging), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.bReserveCharging), E_IotCommunicatorDatatype.type_BOOL);
+	ELSE
+		RETURN;
+	END_IF	
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="MAIN">
+      <LineId Id="3" Count="15" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="21" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageAC">
+      <LineId Id="3" Count="25" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageBlinds">
+      <LineId Id="3" Count="5" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="10" Count="2" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="13" Count="14" />
+      <LineId Id="42" Count="2" />
+      <LineId Id="46" Count="2" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="50" Count="3" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="28" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageChargingStation">
+      <LineId Id="1" Count="8" />
+      <LineId Id="17" Count="2" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="10" Count="5" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageGeneralWidget">
+      <LineId Id="3" Count="39" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageLighting">
+      <LineId Id="3" Count="28" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManagePlugs">
+      <LineId Id="3" Count="14" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageRGBW">
+      <LineId Id="6" Count="2" />
+      <LineId Id="21" Count="7" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="10" Count="1" />
+      <LineId Id="34" Count="7" />
+      <LineId Id="44" Count="2" />
+      <LineId Id="15" Count="5" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageTimeSwitch">
+      <LineId Id="3" Count="71" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageVentilation">
+      <LineId Id="3" Count="19" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.ManageWidgetsOverview">
+      <LineId Id="3" Count="7" />
+      <LineId Id="106" Count="8" />
+      <LineId Id="117" Count="3" />
+      <LineId Id="11" Count="14" />
+      <LineId Id="121" Count="1" />
+      <LineId Id="134" Count="0" />
+      <LineId Id="131" Count="2" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="26" Count="70" />
+      <LineId Id="124" Count="5" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="97" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

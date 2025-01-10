@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_Widget_Blinds_Template" Id="{6b6600d0-c40e-4f58-9c9f-96ec2fd133de}">
+    <Declaration><![CDATA[TYPE ST_Widget_Blinds_Template :
+STRUCT
+	sDisplayName		: STRING := ''; // Insert STRING here to overwrite iot.DisplayName
+	bActive				: BOOL;
+	bPositionUp			: BOOL;
+	bPositionDown		: BOOL;
+	bAngleUp			: BOOL;
+	bAngleDown			: BOOL;
+	{attribute 'iot.Unit':='%'}
+	{attribute 'iot.MinValue':='0'}
+	{attribute 'iot.MaxValue':='100'}
+	nPositionValue		: INT;	
+	nPositionRequest 	: INT;
+	{attribute 'iot.Unit':='°'}
+	{attribute 'iot.MinValue':='-90'}
+	{attribute 'iot.MaxValue':='90'}
+	nAngleValue			: INT;
+	nAngleRequest 		: INT;	
+	sMode				: STRING; // can be set to any value, does not have to match the array below
+	aModes				: ARRAY[0..1] OF STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

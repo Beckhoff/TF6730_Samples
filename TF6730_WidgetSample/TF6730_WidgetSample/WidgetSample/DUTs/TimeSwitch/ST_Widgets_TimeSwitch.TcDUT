@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_Widgets_TimeSwitch" Id="{33cc82f8-c102-4db2-a032-c8930b0b692e}">
+    <Declaration><![CDATA[TYPE ST_Widgets_TimeSwitch :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Time Switch Sample 1'}
+	{attribute 'iot.WidgetType' := 'TimeSwitch'}
+	{attribute 'iot.TimeSwitchStartTimeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchEndTimeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchStartDateVisible' := 'true'}
+	{attribute 'iot.TimeSwitchEndDateVisible' := 'true'}
+	{attribute 'iot.TimeSwitchDaysVisible' := 'false'}
+	{attribute 'iot.TimeSwitchModeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchModeChangeable' := 'false'}
+	stTimeSwitch1		: ST_Widget_TimeSwitch_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Time Switch Sample 2'}
+	{attribute 'iot.WidgetType' := 'TimeSwitch'}
+	{attribute 'iot.TimeSwitchStartTimeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchEndTimeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchStartDateVisible' := 'false'}
+	{attribute 'iot.TimeSwitchEndDateVisible' := 'false'}
+	{attribute 'iot.TimeSwitchDaysVisible' := 'true'}
+	{attribute 'iot.TimeSwitchModeVisible' := 'false'}
+	{attribute 'iot.TimeSwitchModeChangeable' := 'false'}
+	stTimeSwitch2		: ST_Widget_TimeSwitch_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Time Switch Sample 3'}
+	{attribute 'iot.WidgetType' := 'TimeSwitch'}
+	{attribute 'iot.TimeSwitchStartTimeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchEndTimeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchStartDateVisible' := 'true'}
+	{attribute 'iot.TimeSwitchEndDateVisible' := 'true'}
+	{attribute 'iot.TimeSwitchDaysVisible' := 'true'}
+	{attribute 'iot.TimeSwitchModeVisible' := 'true'}
+	{attribute 'iot.TimeSwitchModeChangeable' := 'true'}
+	stTimeSwitch3		: ST_Widget_TimeSwitch_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

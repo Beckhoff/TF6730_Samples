@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="MAIN" Id="{2e17d432-2a7a-4455-ad2e-731edb5e763e}" SpecialFunc="None">
+    <Declaration><![CDATA[// This sample defines a simple TwinCAT Iot Device (fbIot), which connects to localhost.
+// As soon as connection is established, the timer starts and data (stData) is sent every second.
+//
+// A message is sent once on startup and can be triggered by setting bSendMessage to TRUE.
+PROGRAM MAIN
+VAR
+	// Declare FB_IotCommunicator
+	fbIot : FB_IotCommunicator := (sHostName := '127.0.0.1',
+									nPort := 1883,
+									sMainTopic := 'FullSample',
+									sDeviceName := 'TwinCAT IoT Full Sample Device',
+									sUser := 'FullSampleUser',
+									sPassword := '',
+									sDeviceIcon := 'House');
+	// Declare FB_IotCommunicator
+	fbIot2 : FB_IotCommunicator := (sHostName := '127.0.0.1',
+									nPort := 1883,
+									sMainTopic := 'FullSample',
+									sDeviceName := 'TwinCAT IoT JSON String Device',
+									sUser := 'FullSampleUser',
+									sPassword := '',
+									sDeviceIcon := 'Floor');
+	
+	sampleString : STRING(255):= '{"Timestamp": "2022-08-01T08:03:36.023", "GroupName": "JSON Sample", "Values": { "bRandomBOOL_S4": false }, "MetaData": { "bRandomBOOL_S4": { "iot.DisplayName": "BOOL from Source 4", "iot.ReadOnly": "true" }}}';
+	// Sample Data to send
+	stData : ST_SampleData;
+	
+	// Trigger send message
+	bSendMessage : BOOL := TRUE;
+	
+	// Timer to send data only once per second
+	timer : TON;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// .Execute() has to be called cyclically
+// TRUE --> connection will be established
+// FALSE --> connection will be closed
+fbIot.Execute(TRUE);
+fbIot2.Execute(TRUE);
+
+// Start timer when fbIot is connected
+IF fbIot.bConnected AND fbIot2.bConnected THEN
+	timer(IN := TRUE, PT := T#1000MS);
+END_IF
+
+// Send data, if timer is expired
+IF timer.Q THEN
+	timer(IN := FALSE);
+	
+	fbIot.SendData(ADR(stData), SIZEOF(stData));
+	fbIot2.SendDataAsString(ADR(sampleString), LEN(sampleString));
+END_IF
+
+// Receive variable changes, triggered by app
+IF fbIot.fbCommand.bAvailable THEN
+	// Receive data for first level struct
+	IF fbIot.fbCommand.sVarName = 'sSampleString' THEN
+		fbIot.fbCommand.GetValue(ADR(stData.sSampleString), SIZEOF(stData.sSampleString), E_IotCommunicatorDatatype.type_STRING);
+	END_IF
+	// Receive data for second level struct
+	IF fbIot.fbCommand.sVarName = 'stNestedData.bSampleBool' THEN
+		fbIot.fbCommand.GetValue(ADR(stData.stNestedData.bSampleBool), SIZEOF(stData.stNestedData.bSampleBool), E_IotCommunicatorDatatype.type_BOOL);
+	END_IF
+	
+	fbIot.SendData(ADR(stData), SIZEOF(stData));
+	fbIot.fbCommand.Remove();
+END_IF
+
+// Send message, if bSendMessage is set to true
+IF bSendMessage THEN
+	fbIot.SendMessage('This is a sample message from TF6730_FullSample');
+
+	bSendMessage := FALSE;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="112" Count="38" />
+      <LineId Id="71" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

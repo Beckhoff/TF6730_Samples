@@ -1,0 +1,624 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <POU Name="WidgetValues" Id="{63276293-b2a1-492b-8359-7aceb787dbb7}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM WidgetValues
+VAR
+	bInit:BOOL:=TRUE;
+	
+	aDataSeries			: ARRAY[0..6] OF INT 	:= [850,550,969,1050,1351,255,525];
+	aComparismDataSeries: ARRAY[0..6] OF INT 	:= [910,450,950,1234,767,300,175];
+	aDataSeriesIdentifier:ARRAY[0..6] OF STRING := ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+	aLegendLabels		: ARRAY[0..1] OF STRING := ['Week 12 (2024)', 'Week 13 (2024)'];
+	
+	aMaxPower			: ARRAY[0..2] OF LREAL := [5, 5, 5];
+	aCurrentPower		: ARRAY[0..2] OF LREAL := [4.8, 1.2, 2.4];
+	aPowerUnits			: ARRAY[0..2] OF STRING := ['W','kW','mW'];
+	aAmperage			: ARRAY[0..2] OF LREAL := [10000, 0.0001, 1246387];
+	aAmperageCharging	: ARRAY[0..2] OF LREAL := [16, 25, 8];
+	aAmperageUnits		: ARRAY[0..2] OF STRING := ['A','A','A'];
+	aVoltage			: ARRAY[0..2] OF LREAL := [245120000, 241, 0.000000245];
+	aVoltageCharging	: ARRAY[0..2] OF LREAL := [243, 241, 245];
+	aVoltageUnits		: ARRAY[0..2] OF STRING := ['V','V','V'];
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bInit THEN
+	bInit:=FALSE;
+	//Lighting Init
+	GVL_Widgets.stWidgetData.stLights.stLighting2.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stLights.stLighting2.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stLights.stLighting2.sMode:='Init';
+	GVL_Widgets.stWidgetData.stLights.stLighting3.aModes[0]:='Night';
+	GVL_Widgets.stWidgetData.stLights.stLighting3.aModes[1]:='Day';
+	GVL_Widgets.stWidgetData.stLights.stLighting3.sMode:='Init';
+	//RGBW Init
+	GVL_Widgets.stWidgetData.stRGBW.stRGB1.nColorTemperature:=3500;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB1.nHueValue:=57;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB1.nSaturation:=100;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB2.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stRGBW.stRGB2.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stRGBW.stRGB2.sMode:='Init';
+	GVL_Widgets.stWidgetData.stRGBW.stRGB2.nColorTemperature:=2800;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB2.nHueValue:=24;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB2.nSaturation:=60;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB3.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stRGBW.stRGB3.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stRGBW.stRGB3.sMode:='Init';
+	GVL_Widgets.stWidgetData.stRGBW.stRGB3.nColorTemperature:=4000;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB3.nHueValue:=200;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB3.nSaturation:=80;
+	//Blinds Init
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds1.sMode:='ReadOnly';
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds3.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds3.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds3.sMode:='Init';
+	//AC Init
+	GVL_Widgets.stWidgetData.stAC.stAC1.aModes_Lamella[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stAC.stAC1.aModes_Lamella[1]:='Manual';
+	GVL_Widgets.stWidgetData.stAC.stAC1.sMode_Lamella:='Automatic';
+	GVL_Widgets.stWidgetData.stAC.stAC1.aModes_Strength[0]:='Low';
+	GVL_Widgets.stWidgetData.stAC.stAC1.aModes_Strength[1]:='Medium';
+	GVL_Widgets.stWidgetData.stAC.stAC1.aModes_Strength[2]:='High';
+	GVL_Widgets.stWidgetData.stAC.stAC1.sMode_Strength:='Init';
+	GVL_Widgets.stWidgetData.stAC.stAC1.nTemperature:=66;
+	GVL_Widgets.stWidgetData.stAC.stAC1.nTemperatureRequest:=71;
+	GVL_Widgets.stWidgetData.stAC.stAC2.aModes[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stAC.stAC2.aModes[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stAC.stAC2.aModes[2]:='Mode 3';
+	GVL_Widgets.stWidgetData.stAC.stAC2.sMode:='ModeFromPLC';
+	GVL_Widgets.stWidgetData.stAC.stAC2.aModes_Lamella[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stAC.stAC2.aModes_Lamella[1]:='Manual';
+	GVL_Widgets.stWidgetData.stAC.stAC2.sMode_Lamella:='Automatic';
+	GVL_Widgets.stWidgetData.stAC.stAC2.aModes_Strength[0]:='Low';
+	GVL_Widgets.stWidgetData.stAC.stAC2.aModes_Strength[1]:='Medium';
+	GVL_Widgets.stWidgetData.stAC.stAC2.aModes_Strength[2]:='High';
+	GVL_Widgets.stWidgetData.stAC.stAC2.sMode_Strength:='Init';
+	GVL_Widgets.stWidgetData.stAC.stAC2.nTemperature:=19;
+	GVL_Widgets.stWidgetData.stAC.stAC2.nTemperatureRequest:=22;
+	GVL_Widgets.stWidgetData.stAC.stAC3.sMode:='ReadOnly';
+	GVL_Widgets.stWidgetData.stAC.stAC3.sMode_Strength:='ReadOnly';
+	GVL_Widgets.stWidgetData.stAC.stAC3.nTemperature:=20;
+	//Plug Init
+	GVL_Widgets.stWidgetData.stPlugs.stPlug2.aModes[0]:='EnergySave';
+	GVL_Widgets.stWidgetData.stPlugs.stPlug2.aModes[1]:='Normal';
+	GVL_Widgets.stWidgetData.stPlugs.stPlug2.sMode:='EnergySave';
+	//Ventilation Init
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation2.sMode:='Airing';
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation3.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation3.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation3.sMode:='Automatic';
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation1.nValue:=700;
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation1.nValueRequest:=500;
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation2.nValue:=1000;
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation2.nValueRequest:=700;
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation3.nValue:=900;
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation3.nValueRequest:=500;
+	//TimeSwitch Init
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.sMode:='Winter';
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.aModes[0]:='Summer';
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.aModes[1]:='Winter';
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.sMode:='Summer';
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.tStartTime:=TOD#15:30;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.tEndTime:=TOD#20:30;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.dStartDate:=D#2022-06-14;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.dEndDate:=D#2025-09-23;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.tStartTime:=TOD#00:30;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.tEndTime:=TOD#05:30;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.tStartTime:=TOD#19:50;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.tEndTime:=TOD#23:50;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.dStartDate:=D#2022-12-24;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.dEndDate:=D#2022-12-31;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.bMonday:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.bWednesday:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.bFriday:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch1.bYearly:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bTuesday:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bThursday:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bFriday:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch2.bOn:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bSaturday:=TRUE;
+	GVL_Widgets.stWidgetData.stTimeSwitch.stTimeSwitch3.bSunday:=TRUE;
+	//BarChartWidget Init
+	GVL_Widgets.stWidgetData.stBarChart.stBarChart1.aComparismDataSeries:=aComparismDataSeries;
+	GVL_Widgets.stWidgetData.stBarChart.stBarChart1.aDataSeries:=aDataSeries;
+	GVL_Widgets.stWidgetData.stBarChart.stBarChart1.aDataSeriesIdentifier:=aDataSeriesIdentifier;
+	GVL_Widgets.stWidgetData.stBarChart.stBarChart1.aLegendLabels:=aLegendLabels;
+	GVL_Widgets.stWidgetData.stBarChart.stBarChart2.aComparismDataSeries:=aComparismDataSeries;
+	GVL_Widgets.stWidgetData.stBarChart.stBarChart2.aDataSeries:=aDataSeries;
+	GVL_Widgets.stWidgetData.stBarChart.stBarChart2.aDataSeriesIdentifier:=aDataSeriesIdentifier;
+	GVL_Widgets.stWidgetData.stBarChart.stBarChart2.aLegendLabels:=aLegendLabels;
+	// ChargingStation Widget Init
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.sStatus:='Charging';
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.nBatteryLevel:=67;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.nCurrentPower:=7.5;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.aThreePhaseMaxPower:=aMaxPower;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.aThreePhaseCurrentPower:=aCurrentPower;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.aThreePhaseAmperage:=aAmperageCharging;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.aThreePhaseVoltage:=aVoltageCharging;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.nChargingTime:=2068;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation1.nChargingEnergy:=10.4;	
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.sStatus:='Charging';
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.nBatteryLevel:=67;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.nCurrentPower:=6.0;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.aThreePhaseMaxPower:=aMaxPower;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.aThreePhaseCurrentPower:=aCurrentPower;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.aThreePhaseAmperage:=aAmperageCharging;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.aThreePhaseVoltage:=aVoltageCharging;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.nChargingTime:=2068;
+	GVL_Widgets.stWidgetData.stChargingStation.stChargingStation2.nChargingEnergy:=10.4;
+	// EnergyMonitoring Widget Init
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.sStatus:='Monitoring';
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.aThreePhaseMaxPower:=aMaxPower;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.aThreePhaseCurrentPower:=aCurrentPower;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.aThreePhasePowerUnits:=aPowerUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.aThreePhaseAmperage:=aAmperage;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.aThreePhaseAmperageUnits:=aAmperageUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.aThreePhaseVoltage:=aVoltage;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.aThreePhaseVoltageUnits:=aVoltageUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.nPowerQualityFactor:=0.96;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.nCurrentPower:=7.5;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.sPowerUnit:='kW';
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.nEnergy:=10.4;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring1.sEnergyUnit:='kWh';
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.sStatus:='Monitoring';
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.aThreePhaseMaxPower:=aMaxPower;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.aThreePhaseCurrentPower:=aCurrentPower;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.aThreePhasePowerUnits:=aPowerUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.aThreePhaseAmperage:=aAmperage;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.aThreePhaseAmperageUnits:=aAmperageUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.aThreePhaseVoltage:=aVoltage;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.aThreePhaseVoltageUnits:=aVoltageUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.nPowerQualityFactor:=0.82;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.nCurrentPower:=6.0;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.sPowerUnit:='kW';
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.nEnergy:=10.4;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring2.sEnergyUnit:='kWh';
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.sStatus:='Monitoring';
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.aThreePhaseMaxPower:=aMaxPower;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.aThreePhaseCurrentPower:=aCurrentPower;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.aThreePhasePowerUnits:=aPowerUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.aThreePhaseAmperage:=aAmperage;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.aThreePhaseAmperageUnits:=aAmperageUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.aThreePhaseVoltage:=aVoltage;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.aThreePhaseVoltageUnits:=aVoltageUnits;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.nPowerQualityFactor:=0.99;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.nCurrentPower:=4.8;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.sPowerUnit:='kW';
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.nEnergy:=10.4;
+	GVL_Widgets.stWidgetData.stEnergyMonitoring.stEnergyMonitoring3.sEnergyUnit:='kWh';
+	//GeneralWidget Init
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral1.sMode1:='ModeFromPLC';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.aModes1[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.aModes1[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.sMode1:='ModeFromPLC';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.sMode2:='ModeFromPLC';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes1[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes1[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes1[2]:='Mode 3';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes1[3]:='Mode 4';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode1:='ModeFromPLC';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes2[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes2[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes2[2]:='Mode 3';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode2:='ModeFromPLC';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes3[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.aModes3[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.sMode3:='ModeFromPLC';
+	//WidgetOverview Init
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stLighting.sMode:='Init';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.sMode:='Init';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nColorTemperature:=4000;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nHueValue:=200;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nSaturation:=80;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.sMode:='Init';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.aModes[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.aModes[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.aModes[2]:='Mode 3';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode:='ModeFromPLC';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.aModes_Strength[0]:='Low';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.aModes_Strength[1]:='Medium';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.aModes_Strength[2]:='High';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode_Strength:='Low';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.aModes_Lamella[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.aModes_Lamella[1]:='Manual';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.sMode_Lamella:='Automatic';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nTemperature:=22;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nTemperatureRequest:=19;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stPlug.aModes[0]:='EnergySave';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stPlug.aModes[1]:='Normal';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stPlug.sMode:='EnergySave';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.sMode:='Automatic';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.nValue:=1000;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.nValueRequest:=650;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.aModes[0]:='Winter';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.aModes[1]:='Summer';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.sMode:='Summer';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.tStartTime:=TOD#13:30;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.tEndTime:=TOD#20:30;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.dStartDate:=D#2022-09-12;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.dEndDate:=D#2022-12-15;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bMonday:=TRUE;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stTimeSwitch.bFriday:=TRUE;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBarChart.aComparismDataSeries:=aComparismDataSeries;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBarChart.aDataSeries:=aDataSeries;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBarChart.aDataSeriesIdentifier:=aDataSeriesIdentifier;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBarChart.aLegendLabels:=aLegendLabels;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.sStatus:='Charging';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.nBatteryLevel:=67;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.nCurrentPower:=7.5;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.aThreePhaseMaxPower:=aMaxPower;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.aThreePhaseCurrentPower:=aCurrentPower;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.aThreePhaseAmperage:=aAmperageCharging;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.aThreePhaseVoltage:=aVoltageCharging;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.nChargingTime:=2068;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stChargingStation.nChargingEnergy:=10.4;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.sStatus:='Monitoring';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.aThreePhaseMaxPower:=aMaxPower;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.aThreePhaseCurrentPower:=aCurrentPower;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.aThreePhasePowerUnits:=aPowerUnits;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.aThreePhaseAmperage:=aAmperage;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.aThreePhaseAmperageUnits:=aAmperageUnits;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.aThreePhaseVoltage:=aVoltage;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.aThreePhaseVoltageUnits:=aVoltageUnits;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.nPowerQualityFactor:=0.96;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.nCurrentPower:=11.5;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.sPowerUnit:='kW';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.nEnergy:=210.2;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stEnergyMonitoring.sEnergyUnit:='kWh';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.aModes1[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.aModes1[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode1:='ModeFromPLC';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.aModes2[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.aModes2[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.aModes2[2]:='Mode 3';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode2:='Init';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.aModes3[0]:='Mode 1';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.aModes3[1]:='Mode 2';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.sMode3:='Init2';
+END_IF
+
+//Lighting Widgets
+
+//RGBW Widgets
+
+//Blinds Widgets
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionRequest > GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue THEN
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue+1;
+ELSIF GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionRequest < GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue THEN
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue-1;
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionRequest > GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue THEN
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue+1;
+ELSIF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionRequest < GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue THEN
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue-1;
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleRequest > GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue THEN
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue+1;
+ELSIF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleRequest < GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue THEN
+	GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue-1;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionRequest > GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue+1;
+ELSIF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionRequest < GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue-1;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleRequest > GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue+1;
+ELSIF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleRequest < GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue-1;
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionUp THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue < 100 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue+1;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionRequest:=GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionDown := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionDown THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue > 0 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue-1;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionRequest:=GVL_Widgets.stWidgetData.stBlinds.stBlinds2.nPositionValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionUp := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds2.bPositionDown := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionUp THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue < 100 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue+1;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionRequest:=GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionDown := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionDown THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue > 0 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue-1;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionRequest:=GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nPositionValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionUp := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bPositionDown := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleUp THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue > -90 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue-1;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleRequest:=GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleDown := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleDown THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue < 90 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue := GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue+1;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleRequest:=GVL_Widgets.stWidgetData.stBlinds.stBlinds3.nAngleValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleUp := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stBlinds3.bAngleDown := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionUp THEN
+	IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue < 100 THEN
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue+1;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionRequest := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionDown := FALSE;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionDown THEN
+	IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue > 0 THEN
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue-1;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionRequest := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nPositionValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionDown := FALSE;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleUp THEN
+	IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue > -90 THEN
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue-1;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleRequest := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleDown := FALSE;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleDown THEN
+	IF GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue < 90 THEN
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue+1;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleRequest := GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.nAngleValue;
+	ELSE
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleDown := FALSE;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bAngleUp := FALSE;
+	END_IF
+END_IF
+
+//Simple Blinds Widgets
+IF GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionUp THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.nPositionValue > 0 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.nPositionValue-1;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionDown := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionDown THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.nPositionValue < 100 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.nPositionValue+1;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionUp := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds1.bPositionDown := FALSE;
+	END_IF
+END_IF
+
+IF GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionUp THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.nPositionValue > 0 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.nPositionValue-1;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionDown := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionDown THEN
+	IF GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.nPositionValue < 100 THEN
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.nPositionValue := GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.nPositionValue+1;
+	ELSE
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionUp := FALSE;
+		GVL_Widgets.stWidgetData.stBlinds.stSimpleBlinds2.bPositionDown := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionUp THEN
+	IF GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.nPositionValue > 0 THEN
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.nPositionValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.nPositionValue-1;
+	ELSE
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionDown := FALSE;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionUp := FALSE;
+	END_IF
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionDown THEN
+	IF GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.nPositionValue < 100 THEN
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.nPositionValue := GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.nPositionValue+1;
+	ELSE
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionUp := FALSE;
+		GVL_Widgets.stWidgetData.stWidgetsOverview.stSimpleBlinds.bPositionDown := FALSE;
+	END_IF
+END_IF
+
+//Plug Widgets
+
+//AC Widgets
+IF GVL_Widgets.stWidgetData.stAC.stAC1.nTemperature > GVL_Widgets.stWidgetData.stAC.stAC1.nTemperatureRequest THEN
+	GVL_Widgets.stWidgetData.stAC.stAC1.nAcMode:=1;
+ELSIF GVL_Widgets.stWidgetData.stAC.stAC1.nTemperature < GVL_Widgets.stWidgetData.stAC.stAC1.nTemperatureRequest THEN
+	GVL_Widgets.stWidgetData.stAC.stAC1.nAcMode:=3;
+ELSE
+	GVL_Widgets.stWidgetData.stAC.stAC1.nAcMode:=2;
+END_IF
+IF GVL_Widgets.stWidgetData.stAC.stAC2.nTemperature > GVL_Widgets.stWidgetData.stAC.stAC2.nTemperatureRequest THEN
+	GVL_Widgets.stWidgetData.stAC.stAC2.nAcMode:=1;
+ELSIF GVL_Widgets.stWidgetData.stAC.stAC2.nTemperature < GVL_Widgets.stWidgetData.stAC.stAC2.nTemperatureRequest THEN
+	GVL_Widgets.stWidgetData.stAC.stAC2.nAcMode:=3;
+ELSE
+	GVL_Widgets.stWidgetData.stAC.stAC2.nAcMode:=2;
+END_IF
+IF GVL_Widgets.stWidgetData.stAC.stAC3.nTemperature > GVL_Widgets.stWidgetData.stAC.stAC3.nTemperatureRequest THEN
+	GVL_Widgets.stWidgetData.stAC.stAC3.nAcMode:=1;
+ELSIF GVL_Widgets.stWidgetData.stAC.stAC3.nTemperature < GVL_Widgets.stWidgetData.stAC.stAC3.nTemperatureRequest THEN
+	GVL_Widgets.stWidgetData.stAC.stAC3.nAcMode:=3;
+ELSE
+	GVL_Widgets.stWidgetData.stAC.stAC3.nAcMode:=2;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nTemperature > GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nTemperatureRequest THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nAcMode:=1;
+ELSIF GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nTemperature < GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nTemperatureRequest THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nAcMode:=3;
+ELSE
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stAC.nAcMode:=2;
+END_IF
+
+//Ventilation Widgets
+IF GVL_Widgets.stWidgetData.stVentilation.stVentilation1.nValue > GVL_Widgets.stWidgetData.stVentilation.stVentilation1.nValueRequest THEN
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation1.bOn:=TRUE;
+ELSE
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation1.bOn:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stVentilation.stVentilation2.nValue > GVL_Widgets.stWidgetData.stVentilation.stVentilation2.nValueRequest THEN
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation2.bOn:=TRUE;
+ELSE
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation2.bOn:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stVentilation.stVentilation3.nValue > GVL_Widgets.stWidgetData.stVentilation.stVentilation3.nValueRequest THEN
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation3.bOn:=TRUE;
+ELSE
+	GVL_Widgets.stWidgetData.stVentilation.stVentilation3.bOn:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.nValue > GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.nValueRequest THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.bOn:=TRUE;
+ELSE
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stVentilation.bOn:=FALSE;
+END_IF
+
+//TimeSwitch Widgets
+
+//General Widgets
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2Request <> 0 THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2:=GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2Request;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2Request:=0;
+END_IF
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2Request <> 0 THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2:=GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2Request;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2Request:=0;
+END_IF
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3Request <> 0 THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3:=GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3Request;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3Request:=0;
+END_IF
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue2Down THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2 := GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2-1;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue2Down:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue2Up THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2 := GVL_Widgets.stWidgetData.stGeneral.stGeneral2.nValue2+1;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral2.bValue2Up:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue2Down THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2 := GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2-10;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue2Down:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue2Up THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2 := GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue2+10;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue2Up:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue3Down THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3 := GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3-10;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue3Down:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue3Up THEN
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3 := GVL_Widgets.stWidgetData.stGeneral.stGeneral3.nValue3+10;
+	GVL_Widgets.stWidgetData.stGeneral.stGeneral3.bValue3Up:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue2Down THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2 := GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2-1;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue2Down:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue2Up THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2 := GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2+1;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue2Up:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue3Down THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3 := GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3-2;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue3Down:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue3Up THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3 := GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3+2;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.bValue3Up:=FALSE;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2Request <> 0 THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2:=GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2Request;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue2Request:=0;
+END_IF
+IF GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3Request <> 0 THEN
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3:=GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3Request;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3Request:=0;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="WidgetValues">
+      <LineId Id="3" Count="8" />
+      <LineId Id="389" Count="1" />
+      <LineId Id="403" Count="1" />
+      <LineId Id="391" Count="1" />
+      <LineId Id="395" Count="0" />
+      <LineId Id="397" Count="0" />
+      <LineId Id="406" Count="1" />
+      <LineId Id="393" Count="1" />
+      <LineId Id="396" Count="0" />
+      <LineId Id="398" Count="0" />
+      <LineId Id="409" Count="1" />
+      <LineId Id="12" Count="70" />
+      <LineId Id="430" Count="0" />
+      <LineId Id="432" Count="2" />
+      <LineId Id="431" Count="0" />
+      <LineId Id="440" Count="2" />
+      <LineId Id="439" Count="0" />
+      <LineId Id="477" Count="9" />
+      <LineId Id="488" Count="7" />
+      <LineId Id="476" Count="0" />
+      <LineId Id="507" Count="13" />
+      <LineId Id="522" Count="12" />
+      <LineId Id="536" Count="11" />
+      <LineId Id="506" Count="0" />
+      <LineId Id="83" Count="21" />
+      <LineId Id="414" Count="5" />
+      <LineId Id="105" Count="32" />
+      <LineId Id="420" Count="3" />
+      <LineId Id="549" Count="20" />
+      <LineId Id="548" Count="0" />
+      <LineId Id="138" Count="12" />
+      <LineId Id="412" Count="0" />
+      <LineId Id="411" Count="0" />
+      <LineId Id="151" Count="116" />
+      <LineId Id="587" Count="0" />
+      <LineId Id="444" Count="16" />
+      <LineId Id="588" Count="0" />
+      <LineId Id="461" Count="14" />
+      <LineId Id="443" Count="0" />
+      <LineId Id="572" Count="14" />
+      <LineId Id="571" Count="0" />
+      <LineId Id="268" Count="116" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Widgets_AC" Id="{cfb24616-b69d-45ee-ad68-24e8bedcf695}">
+    <Declaration><![CDATA[TYPE ST_Widgets_AC :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'AC Sample 1'}
+	{attribute 'iot.WidgetType' := 'AC'}
+	{attribute 'iot.ACValueRequestVisible' := 'true'}
+	{attribute 'iot.ACSliderVisible' := 'false'}
+	{attribute 'iot.ACModeVisible' := 'false'}
+	{attribute 'iot.ACModeChangeable' := 'false'}
+	{attribute 'iot.ACModeStrengthVisible' := 'true'}
+	{attribute 'iot.ACModeStrengthChangeable' := 'true'}
+	{attribute 'iot.ACModeLamellaVisible' := 'true'}
+	{attribute 'iot.ACModeLamellaChangeable' := 'true'}
+	stAC1			: ST_Widget_AC_AlternativeTemplate;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'AC Sample 2'}
+	{attribute 'iot.WidgetType' := 'AC'}
+	{attribute 'iot.ACValueRequestVisible' := 'true'}
+	{attribute 'iot.ACSliderVisible' := 'true'}
+	{attribute 'iot.ACModeVisible' := 'true'}
+	{attribute 'iot.ACModeChangeable' := 'true'}
+	{attribute 'iot.ACModeStrengthVisible' := 'true'}
+	{attribute 'iot.ACModeStrengthChangeable' := 'true'}
+	{attribute 'iot.ACModeLamellaVisible' := 'true'}
+	{attribute 'iot.ACModeLamellaChangeable' := 'true'}
+	stAC2			: ST_Widget_AC_Template;
+	
+	{attribute 'iot.ReadOnly' := 'true'}
+	{attribute 'iot.DisplayName' := 'AC Sample 3'}
+	{attribute 'iot.WidgetType' := 'AC'}
+	{attribute 'iot.ACValueRequestVisible' := 'false'}
+	{attribute 'iot.ACSliderVisible' := 'true'}
+	{attribute 'iot.ACModeVisible' := 'true'}
+	{attribute 'iot.ACModeChangeable' := 'false'}
+	{attribute 'iot.ACModeStrengthVisible' := 'true'}
+	{attribute 'iot.ACModeStrengthChangeable' := 'false'}
+	{attribute 'iot.ACModeLamellaVisible' := 'false'}
+	{attribute 'iot.ACModeLamellaChangeable' := 'false'}
+	stAC3			: ST_Widget_AC_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

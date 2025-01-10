@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <DUT Name="ST_Widgets_EnergyMonitoring" Id="{37a53f6f-7c84-4a5c-92df-d933af3e01d5}">
+    <Declaration><![CDATA[TYPE ST_Widgets_EnergyMonitoring :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Energy Monitoring Sample 1'}
+	{attribute 'iot.WidgetType' := 'EnergyMonitoring'}
+	{attribute 'iot.EnergyMonitoringPhase2Visible' := 'true'} 
+	{attribute 'iot.EnergyMonitoringPhase3Visible' := 'true'} 
+	stEnergyMonitoring1	: ST_Widget_EnergyMonitoring_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Energy Monitoring Sample 2'}
+	{attribute 'iot.WidgetType' := 'EnergyMonitoring'}
+	{attribute 'iot.EnergyMonitoringPhase2Visible' := 'true'} 
+	{attribute 'iot.EnergyMonitoringPhase3Visible' := 'false'} 
+	stEnergyMonitoring2	: ST_Widget_EnergyMonitoring_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Energy Monitoring Sample 3'}
+	{attribute 'iot.WidgetType' := 'EnergyMonitoring'}
+	{attribute 'iot.EnergyMonitoringPhase2Visible' := 'false'} 
+	{attribute 'iot.EnergyMonitoringPhase3Visible' := 'false'} 
+	stEnergyMonitoring3	: ST_Widget_EnergyMonitoring_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

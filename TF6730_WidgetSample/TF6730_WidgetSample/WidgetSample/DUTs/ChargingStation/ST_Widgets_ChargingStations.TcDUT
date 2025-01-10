@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <DUT Name="ST_Widgets_ChargingStations" Id="{7d7e9353-a880-4d23-9e1d-7346a55b48e4}">
+    <Declaration><![CDATA[TYPE ST_Widgets_ChargingStations :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Charging Station Sample 1'}
+	{attribute 'iot.WidgetType' := 'ChargingStation'}
+	{attribute 'iot.ChargingStationReserveVisible' := 'true'} 
+	{attribute 'iot.ChargingStationPhase2Visible' := 'true'} 
+	{attribute 'iot.ChargingStationPhase3Visible' := 'true'} 
+	stChargingStation1	: ST_Widget_ChargingStation_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'Charging Station Sample 2'}
+	{attribute 'iot.WidgetType' := 'ChargingStation'}
+	{attribute 'iot.ChargingStationReserveVisible' := 'false'} 
+	{attribute 'iot.ChargingStationPhase2Visible' := 'true'} 
+	{attribute 'iot.ChargingStationPhase3Visible' := 'false'} 
+	stChargingStation2	: ST_Widget_ChargingStation_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

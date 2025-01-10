@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Widget_Lighting_Template" Id="{bae3c45e-e6d1-4ac4-b10a-325ae1bc7947}">
+    <Declaration><![CDATA[TYPE ST_Widget_Lighting_Template :
+STRUCT
+	bLight		: BOOL;
+	{attribute 'iot.Unit':='%'}
+	{attribute 'iot.MinValue':='0'}
+	{attribute 'iot.MaxValue':='100'}
+	nLight		: INT;	
+	sMode		: STRING ;
+	aModes		: ARRAY[0..1] OF STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

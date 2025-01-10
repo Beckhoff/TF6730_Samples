@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Widget_GeneralWidget_Template" Id="{fb636d8d-e233-459c-b3e1-cb0cdc2c3b1d}">
+    <Declaration><![CDATA[TYPE ST_Widget_GeneralWidget_Template :
+STRUCT
+	sDisplayName	: STRING := ''; // Insert STRING here to overwrite iot.DisplayName
+
+	bValue1			: BOOL;
+	
+	{attribute 'iot.Unit':='%'}
+	{attribute 'iot.MinValue':='0'}
+	{attribute 'iot.MaxValue':='100'}
+	nValue2			: INT;	
+	nValue2Request 	: INT;
+	bValue2Up		: BOOL;
+	bValue2Down		: BOOL;
+	
+	{attribute 'iot.Unit':='°'}
+	{attribute 'iot.MinValue':='-90'}
+	{attribute 'iot.MaxValue':='90'}
+	nValue3			: INT;
+	nValue3Request 	: INT;
+	bValue3Up		: BOOL;
+	bValue3Down		: BOOL;
+	
+	sMode1			: STRING; // can be set to any value, does not have to match the array below
+	aModes1			: ARRAY[0..1] OF STRING;
+	sMode2			: STRING;
+	aModes2			: ARRAY[0..2] OF STRING;
+	sMode3			: STRING;
+	aModes3			: ARRAY[0..1] OF STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

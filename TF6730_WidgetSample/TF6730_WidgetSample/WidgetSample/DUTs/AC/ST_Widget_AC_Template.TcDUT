@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Widget_AC_Template" Id="{5c35cffc-e5c2-44fb-a835-70c0b2ba295e}">
+    <Declaration><![CDATA[TYPE ST_Widget_AC_Template :
+STRUCT
+	sDisplayName	: STRING := ''; // Insert STRING here to overwrite iot.DisplayName
+
+	nAcMode			: INT;	// 0: Off, 1: Cooling, 2: Ventilating, 3: Heating, 4: Cooling Off, 5: Ventilating Off, 6: Heating Off
+	
+	{attribute 'iot.Unit':='°C'}
+	{attribute 'iot.MinValue':='18'}
+	{attribute 'iot.MaxValue':='23'}
+	nTemperature		: LREAL;	
+	nTemperatureRequest : LREAL;
+	
+	sMode			: STRING; // can be set to any value, does not have to match the array below
+	aModes			: ARRAY[0..2] OF STRING;
+	sMode_Strength	: STRING;
+	aModes_Strength	: ARRAY[0..2] OF STRING;
+	sMode_Lamella	: STRING;
+	aModes_Lamella	: ARRAY[0..1] OF STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

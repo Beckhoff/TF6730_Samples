@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+  <DUT Name="ST_WidgetData" Id="{499993c7-8b57-486e-9379-8d02e8d3f92e}">
+    <Declaration><![CDATA[TYPE ST_WidgetData :
+STRUCT
+	{attribute 'iot.NestedStructIcon' := 'Floor'}
+	{attribute 'iot.DisplayName' := 'All Widgets Overview'}
+	stWidgetsOverview	: ST_Widgets_Overview;
+	
+	{attribute 'iot.NestedStructIcon' := 'Lightbulb'}
+	{attribute 'iot.DisplayName' := 'Light Widgets'}
+	stLights			: ST_Widgets_Lightings;
+	
+	{attribute 'iot.NestedStructIcon' := 'Lightbulb'}
+	{attribute 'iot.DisplayName' := 'RGBW Widgets'}
+	stRGBW				: ST_Widgets_RGBW;
+	
+	{attribute 'iot.NestedStructIcon' := 'Blinds'}
+	{attribute 'iot.DisplayName' := 'Blinds Widgets'}
+	stBlinds			: ST_Widgets_Blinds;
+	
+	{attribute 'iot.NestedStructIcon' := 'Plug'}
+	{attribute 'iot.DisplayName' := 'Plug Widgets'}
+	stPlugs				: ST_Widgets_Plugs;
+	
+	{attribute 'iot.NestedStructIcon' := 'Temperature'}
+	{attribute 'iot.DisplayName' := 'AC Widgets'}
+	stAC				: ST_Widgets_AC;
+	
+	{attribute 'iot.NestedStructIcon' := 'Co2'}
+	{attribute 'iot.DisplayName' := 'Ventilation Widgets'}
+	stVentilation		: ST_Widgets_Ventilation;
+	
+	{attribute 'iot.NestedStructIcon' := 'Clock'}
+	{attribute 'iot.DisplayName' := 'Time Switch Widgets'}
+	stTimeSwitch		: ST_Widgets_TimeSwitch;
+	
+	{attribute 'iot.NestedStructIcon' := 'Floor'}
+	{attribute 'iot.DisplayName' := 'BarChart Widgets'}
+	stBarChart			: ST_Widgets_BarChart;
+	
+	{attribute 'iot.NestedStructIcon' := 'Charging_Station'}
+	{attribute 'iot.DisplayName' := 'Charging Station Widgets'}
+	stChargingStation	: ST_Widgets_ChargingStations;
+	
+	{attribute 'iot.NestedStructIcon' := 'Lightning'}
+	{attribute 'iot.DisplayName' := 'Energy Monitoring Widgets'}
+	stEnergyMonitoring		: ST_Widgets_EnergyMonitoring;
+	
+	{attribute 'iot.NestedStructIcon' := 'Room'}
+	{attribute 'iot.DisplayName' := 'General Widgets'}
+	stGeneral			: ST_Widgets_GeneralWidget;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

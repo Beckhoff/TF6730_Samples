@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_Widgets_RGBW" Id="{f4703378-08c5-440f-a004-52ce6a036cba}">
+    <Declaration><![CDATA[TYPE ST_Widgets_RGBW :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'true'}
+	{attribute 'iot.DisplayName' := 'RGBW Lighting Sample 1'}
+	{attribute 'iot.WidgetType' := 'RGBW'}
+	{attribute 'iot.LightValueVisible' := 'false'}
+	{attribute 'iot.LightSliderVisible' := 'false'}
+	{attribute 'iot.LightColorPaletteVisible' := 'true'}
+	{attribute 'iot.LightColorTemperatureSliderVisible' := 'true'}
+	{attribute 'iot.LightModeVisible' := 'false'}
+	{attribute 'iot.LightModeChangeable' := 'false'}
+	stRGB1	: ST_Widget_RGBW_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'RGBW Lighting Sample 2'}
+	{attribute 'iot.WidgetType' := 'RGBW'}
+	{attribute 'iot.LightValueVisible' := 'true'}
+	{attribute 'iot.LightSliderVisible' := 'true'}
+	{attribute 'iot.LightColorPaletteVisible' := 'true'}
+	{attribute 'iot.LightColorTemperatureSliderVisible' := 'false'}
+	{attribute 'iot.LightModeVisible' := 'true'}
+	{attribute 'iot.LightModeChangeable' := 'true'}
+	stRGB2	: ST_Widget_RGBW_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'RGBW Lighting Sample 3'}
+	{attribute 'iot.WidgetType' := 'RGBW'}
+	{attribute 'iot.LightValueVisible' := 'true'}
+	{attribute 'iot.LightSliderVisible' := 'true'}
+	{attribute 'iot.LightColorPaletteVisible' := 'true'}
+	{attribute 'iot.LightColorTemperatureSliderVisible' := 'true'}
+	{attribute 'iot.LightModeVisible' := 'true'}
+	{attribute 'iot.LightModeChangeable' := 'true'}
+	stRGB3	: ST_Widget_RGBW_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
