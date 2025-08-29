@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.12">
   <POU Name="MAIN" Id="{c809f85b-ef8c-42e2-a5f4-bb18b84a8841}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
@@ -35,6 +35,7 @@ ManageChargingStation();
 ManageGeneralWidget();
 ManagePlugs();
 ManageRGBW();
+ManageRGBWEL2564();
 ManageTimeSwitch();
 ManageVentilation();
 
@@ -304,8 +305,52 @@ IF fbIotWidgets.fbCommand.bAvailable THEN
 		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nSaturation), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nSaturation), E_IotCommunicatorDatatype.type_INT);
 	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.nColorTemperature' THEN
 		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nColorTemperature), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nColorTemperature), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.nWhite' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nWhite), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.nWhite), E_IotCommunicatorDatatype.type_INT);
 	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBW.stRGB3.sMode' THEN
 		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBW.stRGB3.sMode), SIZEOF(GVL_Widgets.stWidgetData.stRGBW.stRGB3.sMode), E_IotCommunicatorDatatype.type_STRING);
+	ELSE
+		RETURN;
+	END_IF
+	fbIotWidgets.SendData(ADR(GVL_Widgets.stWidgetData), SIZEOF(GVL_Widgets.stWidgetData));
+	fbIotWidgets.fbCommand.Remove();
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageRGBWEL2564" Id="{3508f78a-6e19-4dce-bd42-a881c4c3f47f}">
+      <Declaration><![CDATA[METHOD ManageRGBWEL2564
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Handling of commands from App
+IF fbIotWidgets.fbCommand.bAvailable THEN
+	//RGBW EL2564 Sample 2 - no modes
+	IF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed2.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.bOn), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed2.nGreen' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nGreen), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nGreen), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed2.nBlue' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nBlue), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nBlue), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed2.nRed' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nRed), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nRed), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed2.nWhite' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nWhite), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nWhite), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed2.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.sMode), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//RGBW EL2564 Sample 3
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed3.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.bOn), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed3.nGreen' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nGreen), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nGreen), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed3.nBlue' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nBlue), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nBlue), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed3.nRed' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nRed), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nRed), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed3.nWhite' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nWhite), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nWhite), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stRGBWEL2564.stRGBWLed3.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.sMode), SIZEOF(GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.sMode), E_IotCommunicatorDatatype.type_STRING);
 	ELSE
 		RETURN;
 	END_IF
@@ -452,8 +497,23 @@ END_VAR]]></Declaration>
 		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nSaturation), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nSaturation), E_IotCommunicatorDatatype.type_INT);
 	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.nColorTemperature' THEN
 		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nColorTemperature), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nColorTemperature), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.nWhite' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nWhite), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nWhite), E_IotCommunicatorDatatype.type_INT);
 	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBW.sMode' THEN
 		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.sMode), E_IotCommunicatorDatatype.type_STRING);
+	//Overview RGBWEL2564
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBWLed.bOn' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.bOn), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.bOn), E_IotCommunicatorDatatype.type_BOOL);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBWLed.nGreen' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nGreen), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nGreen), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBWLed.nBlue' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nBlue), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nBlue), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBWLed.nRed' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nRed), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nRed), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBWLed.nWhite' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nWhite), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nWhite), E_IotCommunicatorDatatype.type_INT);
+	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stRGBWLed.sMode' THEN
+		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.sMode), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.sMode), E_IotCommunicatorDatatype.type_STRING);
 	//Overview Blinds
 	ELSIF fbIotWidgets.fbCommand.sVarName = 'stWidgetsOverview.stBlinds.bPositionUp' THEN
 		fbIotWidgets.fbCommand.GetValue(ADR(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionUp), SIZEOF(GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.bPositionUp), E_IotCommunicatorDatatype.type_BOOL);
@@ -562,82 +622,5 @@ END_VAR]]></Declaration>
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="MAIN">
-      <LineId Id="3" Count="15" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="19" Count="1" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="21" Count="3" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageAC">
-      <LineId Id="3" Count="25" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageBlinds">
-      <LineId Id="3" Count="5" />
-      <LineId Id="39" Count="0" />
-      <LineId Id="10" Count="2" />
-      <LineId Id="40" Count="1" />
-      <LineId Id="13" Count="14" />
-      <LineId Id="42" Count="2" />
-      <LineId Id="46" Count="2" />
-      <LineId Id="45" Count="0" />
-      <LineId Id="50" Count="3" />
-      <LineId Id="49" Count="0" />
-      <LineId Id="28" Count="6" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageChargingStation">
-      <LineId Id="1" Count="8" />
-      <LineId Id="17" Count="2" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="10" Count="5" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageGeneralWidget">
-      <LineId Id="3" Count="39" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageLighting">
-      <LineId Id="3" Count="28" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManagePlugs">
-      <LineId Id="3" Count="14" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageRGBW">
-      <LineId Id="6" Count="2" />
-      <LineId Id="21" Count="7" />
-      <LineId Id="33" Count="0" />
-      <LineId Id="10" Count="1" />
-      <LineId Id="34" Count="7" />
-      <LineId Id="44" Count="2" />
-      <LineId Id="15" Count="5" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageTimeSwitch">
-      <LineId Id="3" Count="71" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageVentilation">
-      <LineId Id="3" Count="19" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.ManageWidgetsOverview">
-      <LineId Id="3" Count="7" />
-      <LineId Id="106" Count="8" />
-      <LineId Id="117" Count="3" />
-      <LineId Id="11" Count="14" />
-      <LineId Id="121" Count="1" />
-      <LineId Id="134" Count="0" />
-      <LineId Id="131" Count="2" />
-      <LineId Id="130" Count="0" />
-      <LineId Id="26" Count="70" />
-      <LineId Id="124" Count="5" />
-      <LineId Id="123" Count="0" />
-      <LineId Id="97" Count="4" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

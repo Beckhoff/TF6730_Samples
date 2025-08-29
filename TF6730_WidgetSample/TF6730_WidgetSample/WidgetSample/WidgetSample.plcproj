@@ -8,7 +8,7 @@
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>WidgetSample</Name>
-    <ProgramVersion>3.1.4026.12</ProgramVersion>
+    <ProgramVersion>3.1.4026.18</ProgramVersion>
     <Application>{a31d3b75-129b-4627-a9af-2678e442ea26}</Application>
     <TypeSystem>{3618a847-cad7-4035-bab4-36b174dbdf74}</TypeSystem>
     <Implicit_Task_Info>{a434b2c4-1dc8-4ff1-b40f-8538abc87cd7}</Implicit_Task_Info>
@@ -17,6 +17,12 @@
     <LibraryReferences>{bb8f0693-653c-4cfe-8d56-cf6823580f77}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\4ChannelLED\ST_Widgets_RGBWEL2564.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\4ChannelLED\ST_Widget_RGBWEL2564_Template.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\AC\ST_Widgets_AC.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -127,6 +133,7 @@
     <Folder Include="DUTs\BarChart" />
     <Folder Include="DUTs\ChargingStation" />
     <Folder Include="DUTs\EnergyMonitoring" />
+    <Folder Include="DUTs\4ChannelLED" />
     <Folder Include="DUTs\RGBW" />
     <Folder Include="DUTs\Plugs" />
     <Folder Include="DUTs\TimeSwitch" />

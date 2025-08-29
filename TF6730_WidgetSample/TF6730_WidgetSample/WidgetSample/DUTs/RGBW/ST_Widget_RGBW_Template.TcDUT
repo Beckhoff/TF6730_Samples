@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.12">
   <DUT Name="ST_Widget_RGBW_Template" Id="{6342435f-fc3a-4727-bf93-cde173436717}">
     <Declaration><![CDATA[TYPE ST_Widget_RGBW_Template :
 STRUCT
@@ -19,6 +19,7 @@ STRUCT
 	{attribute 'iot.MinValue':='2400'}
 	{attribute 'iot.MaxValue':='6500'}
 	nColorTemperature : INT;
+	nWhite : INT;
 	
 	sMode		: STRING;
 	aModes		: ARRAY[0..1] OF STRING;

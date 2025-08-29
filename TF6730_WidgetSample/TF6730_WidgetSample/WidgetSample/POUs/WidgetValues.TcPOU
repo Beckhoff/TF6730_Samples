@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.12">
   <POU Name="WidgetValues" Id="{63276293-b2a1-492b-8359-7aceb787dbb7}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM WidgetValues
 VAR
@@ -45,8 +45,28 @@ END_VAR
 	GVL_Widgets.stWidgetData.stRGBW.stRGB3.aModes[1]:='Manual';
 	GVL_Widgets.stWidgetData.stRGBW.stRGB3.sMode:='Init';
 	GVL_Widgets.stWidgetData.stRGBW.stRGB3.nColorTemperature:=4000;
+	GVL_Widgets.stWidgetData.stRGBW.stRGB3.nWhite:=78;
 	GVL_Widgets.stWidgetData.stRGBW.stRGB3.nHueValue:=200;
 	GVL_Widgets.stWidgetData.stRGBW.stRGB3.nSaturation:=80;
+	//RGBW EL2564 Init
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed1.nBlue:=16534;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed1.nGreen:=30762;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed1.nRed:=2912;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed1.nWhite:=8621;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed1.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed1.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nBlue:=31678;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nGreen:=5000;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nRed:=17632;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.nWhite:=19999;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed2.aModes[1]:='Manual';
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nBlue:=1111;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nGreen:=22222;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nRed:=3333;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.nWhite:=27836;
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stRGBWEL2564.stRGBWLed3.aModes[1]:='Manual';
 	//Blinds Init
 	GVL_Widgets.stWidgetData.stBlinds.stBlinds1.sMode:='ReadOnly';
 	GVL_Widgets.stWidgetData.stBlinds.stBlinds3.aModes[0]:='Automatic';
@@ -212,8 +232,15 @@ END_VAR
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.aModes[1]:='Manual';
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.sMode:='Init';
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nColorTemperature:=4000;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nWhite:=43;
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nHueValue:=200;
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBW.nSaturation:=80;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nBlue:=10423;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nGreen:=29871;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nRed:=1234;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.nWhite:=9213;
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.aModes[0]:='Automatic';
+	GVL_Widgets.stWidgetData.stWidgetsOverview.stRGBWLed.aModes[1]:='Manual';
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.aModes[0]:='Automatic';
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.aModes[1]:='Manual';
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stBlinds.sMode:='Init';
@@ -575,50 +602,5 @@ IF GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3Request <> 0 THEN
 	GVL_Widgets.stWidgetData.stWidgetsOverview.stGeneral.nValue3Request:=0;
 END_IF]]></ST>
     </Implementation>
-    <LineIds Name="WidgetValues">
-      <LineId Id="3" Count="8" />
-      <LineId Id="389" Count="1" />
-      <LineId Id="403" Count="1" />
-      <LineId Id="391" Count="1" />
-      <LineId Id="395" Count="0" />
-      <LineId Id="397" Count="0" />
-      <LineId Id="406" Count="1" />
-      <LineId Id="393" Count="1" />
-      <LineId Id="396" Count="0" />
-      <LineId Id="398" Count="0" />
-      <LineId Id="409" Count="1" />
-      <LineId Id="12" Count="70" />
-      <LineId Id="430" Count="0" />
-      <LineId Id="432" Count="2" />
-      <LineId Id="431" Count="0" />
-      <LineId Id="440" Count="2" />
-      <LineId Id="439" Count="0" />
-      <LineId Id="477" Count="9" />
-      <LineId Id="488" Count="7" />
-      <LineId Id="476" Count="0" />
-      <LineId Id="507" Count="13" />
-      <LineId Id="522" Count="12" />
-      <LineId Id="536" Count="11" />
-      <LineId Id="506" Count="0" />
-      <LineId Id="83" Count="21" />
-      <LineId Id="414" Count="5" />
-      <LineId Id="105" Count="32" />
-      <LineId Id="420" Count="3" />
-      <LineId Id="549" Count="20" />
-      <LineId Id="548" Count="0" />
-      <LineId Id="138" Count="12" />
-      <LineId Id="412" Count="0" />
-      <LineId Id="411" Count="0" />
-      <LineId Id="151" Count="116" />
-      <LineId Id="587" Count="0" />
-      <LineId Id="444" Count="16" />
-      <LineId Id="588" Count="0" />
-      <LineId Id="461" Count="14" />
-      <LineId Id="443" Count="0" />
-      <LineId Id="572" Count="14" />
-      <LineId Id="571" Count="0" />
-      <LineId Id="268" Count="116" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

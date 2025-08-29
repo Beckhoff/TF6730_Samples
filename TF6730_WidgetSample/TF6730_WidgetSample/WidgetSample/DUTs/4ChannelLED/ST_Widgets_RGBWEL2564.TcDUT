@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.12">
+  <DUT Name="ST_Widgets_RGBWEL2564" Id="{b8e34f54-e24c-42af-9ee7-c3b0a7d3f1ce}">
+    <Declaration><![CDATA[TYPE ST_Widgets_RGBWEL2564 :
+STRUCT
+	{attribute 'iot.ReadOnly' := 'true'}
+	{attribute 'iot.DisplayName' := ' RGBW EL2564 Sample 1'}
+	{attribute 'iot.WidgetType' := 'RGBWEL2564'}
+	{attribute 'iot.LedRedSliderVisible' := 'true'}
+	{attribute 'iot.LedGreenSliderVisible' := 'true'}
+	{attribute 'iot.LedBlueSliderVisible' := 'true'}
+	{attribute 'iot.LedWhiteSliderVisible' := 'true'}
+	{attribute 'iot.LedModeVisible' := 'false'}
+	{attribute 'iot.LedModeChangeable' := 'false'}
+	stRGBWLed1	: ST_Widget_RGBWEL2564_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'RGBW EL2564 Sample 2'}
+	{attribute 'iot.WidgetType' := 'RGBWEL2564'}
+	{attribute 'iot.LedRedSliderVisible' := 'true'}
+	{attribute 'iot.LedGreenSliderVisible' := 'true'}
+	{attribute 'iot.LedBlueSliderVisible' := 'true'}
+	{attribute 'iot.LedWhiteSliderVisible' := 'true'}
+	{attribute 'iot.LedModeVisible' := 'true'}
+	{attribute 'iot.LedModeChangeable' := 'true'}
+	stRGBWLed2	: ST_Widget_RGBWEL2564_Template;
+	
+	{attribute 'iot.ReadOnly' := 'false'}
+	{attribute 'iot.DisplayName' := 'RGBW EL2564 Sample 3'}
+	{attribute 'iot.WidgetType' := 'RGBWEL2564'}
+	{attribute 'iot.LedRedSliderVisible' := 'true'}
+	{attribute 'iot.LedGreenSliderVisible' := 'true'}
+	{attribute 'iot.LedBlueSliderVisible' := 'true'}
+	{attribute 'iot.LedWhiteSliderVisible' := 'true'}
+	{attribute 'iot.LedModeVisible' := 'true'}
+	{attribute 'iot.LedModeChangeable' := 'true'}
+	stRGBWLed3	: ST_Widget_RGBWEL2564_Template;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
