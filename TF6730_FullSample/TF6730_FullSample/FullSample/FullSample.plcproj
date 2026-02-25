@@ -8,7 +8,7 @@
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>FullSample</Name>
-    <ProgramVersion>3.1.4023.0</ProgramVersion>
+    <ProgramVersion>3.1.4026.20</ProgramVersion>
     <Application>{f4779c41-a72f-4175-95e8-7697faef5a95}</Application>
     <TypeSystem>{5593c054-0ec7-4b90-b6ce-e59e5645c746}</TypeSystem>
     <Implicit_Task_Info>{0b65cbe9-37c8-4411-a7a7-33d653c66733}</Implicit_Task_Info>
@@ -22,6 +22,10 @@
     </Compile>
     <Compile Include="DUTs\ST_SampleData_Nested.TcDUT">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\GVL.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>

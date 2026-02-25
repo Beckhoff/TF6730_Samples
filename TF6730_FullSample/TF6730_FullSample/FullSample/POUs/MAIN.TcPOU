@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.17">
   <POU Name="MAIN" Id="{2e17d432-2a7a-4455-ad2e-731edb5e763e}" SpecialFunc="None">
     <Declaration><![CDATA[// This sample defines a simple TwinCAT Iot Device (fbIot), which connects to localhost.
 // As soon as connection is established, the timer starts and data (stData) is sent every second.
@@ -25,6 +25,7 @@ VAR
 									sDeviceIcon := 'Floor');
 	
 	sampleString : STRING(255):= '{"Timestamp": "2022-08-01T08:03:36.023", "GroupName": "JSON Sample", "Values": { "bRandomBOOL_S4": false }, "MetaData": { "bRandomBOOL_S4": { "iot.DisplayName": "BOOL from Source 4", "iot.ReadOnly": "true" }}}';
+	
 	// Sample Data to send
 	stData : ST_SampleData;
 	
@@ -33,6 +34,9 @@ VAR
 	
 	// Timer to send data only once per second
 	timer : TON;
+	
+	// Init
+	bInit	: BOOL := FALSE;
 END_VAR
 
 ]]></Declaration>
@@ -51,12 +55,34 @@ END_IF
 // Send data, if timer is expired
 IF timer.Q THEN
 	timer(IN := FALSE);
-	
 	fbIot.SendData(ADR(stData), SIZEOF(stData));
 	fbIot2.SendDataAsString(ADR(sampleString), LEN(sampleString));
 END_IF
 
-// Receive variable changes, triggered by app
+// Send message, if bSendMessage is set to true
+IF bSendMessage THEN
+	// Regular message
+	fbIot.SendMessage('This is a sample message from TF6730_FullSample');
+	// Categorized message
+	fbIot.SendMessageEx('This is a sample categorized message', 'Error');
+	bSendMessage := FALSE;
+END_IF
+
+// Init
+IF NOT bInit THEN
+	// Sending custom icon as Base64 string
+	fbIot.SendCustomDeviceIcon(ADR(GVL.sBase64String), FALSE);
+END_IF
+
+ReceiveValues();]]></ST>
+    </Implementation>
+    <Method Name="ReceiveValues" Id="{f99ce5e4-c5f2-4ef8-b154-0872f97066fc}">
+      <Declaration><![CDATA[METHOD ReceiveValues
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Receive variable changes, triggered by app
 IF fbIot.fbCommand.bAvailable THEN
 	// Receive data for first level struct
 	IF fbIot.fbCommand.sVarName = 'sSampleString' THEN
@@ -69,18 +95,8 @@ IF fbIot.fbCommand.bAvailable THEN
 	
 	fbIot.SendData(ADR(stData), SIZEOF(stData));
 	fbIot.fbCommand.Remove();
-END_IF
-
-// Send message, if bSendMessage is set to true
-IF bSendMessage THEN
-	fbIot.SendMessage('This is a sample message from TF6730_FullSample');
-
-	bSendMessage := FALSE;
 END_IF]]></ST>
-    </Implementation>
-    <LineIds Name="MAIN">
-      <LineId Id="112" Count="38" />
-      <LineId Id="71" Count="0" />
-    </LineIds>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
